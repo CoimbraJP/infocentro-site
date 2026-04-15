@@ -17,6 +17,7 @@ interface FrameSequenceProps {
   scale?: number;
   offsetXPercent?: number;
   offsetYPercent?: number;
+  step?: number;
 }
 
 export default function FrameSequence({
@@ -34,6 +35,7 @@ export default function FrameSequence({
   scale = 1,
   offsetXPercent = 0,
   offsetYPercent = 0,
+  step = 1,
 }: FrameSequenceProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -48,30 +50,42 @@ export default function FrameSequence({
   };
 
   useEffect(() => {
-    const images: HTMLImageElement[] = Array(totalFrames).fill(null).map(() => new Image());
+    const images: HTMLImageElement[] = Array(totalFrames).fill(null);
+    
+    // Only initialize and load images that match the step
+    for (let i = 0; i < totalFrames; i += step) {
+      images[i] = new Image();
+    }
     imagesRef.current = images;
 
     const BATCH1_END = Math.min(30, totalFrames);
 
     let loaded = 0;
-    for (let i = 0; i < BATCH1_END; i++) {
+    const initialBatch = [];
+    for (let i = 0; i < BATCH1_END; i += step) {
+        initialBatch.push(i);
+    }
+
+    initialBatch.forEach((i) => {
       images[i].onload = () => {
         loaded++;
         if (loaded === 1) {
           syncCanvasSize();
           drawFrame(0);
         }
-        if (loaded === BATCH1_END) {
+        if (loaded === initialBatch.length) {
           isReadyRef.current = true;
           drawFrame(currentFrame);
         }
       };
       images[i].src = getFrameUrl(i);
-    }
+    });
 
     const loadRest = () => {
       for (let i = BATCH1_END; i < totalFrames; i++) {
-        images[i].src = getFrameUrl(i);
+        if (images[i]) {
+          images[i].src = getFrameUrl(i);
+        }
       }
     };
 
@@ -80,7 +94,7 @@ export default function FrameSequence({
     } else {
       setTimeout(loadRest, 100);
     }
-  }, [totalFrames, framesPath]);
+  }, [totalFrames, framesPath, step]);
 
   const syncCanvasSize = () => {
     const canvas = canvasRef.current;
@@ -92,7 +106,10 @@ export default function FrameSequence({
 
   const drawFrame = (frameIndex: number) => {
     const canvas = canvasRef.current;
-    const img = imagesRef.current[frameIndex];
+    
+    // Find the nearest available frame based on step
+    const availableIndex = Math.floor(frameIndex / step) * step;
+    const img = imagesRef.current[availableIndex];
     if (!canvas || !img || !img.complete || img.naturalWidth === 0) return;
 
     const ctx = canvas.getContext('2d');

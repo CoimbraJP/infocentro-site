@@ -9,15 +9,15 @@ export default function InfoCentroPage() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024); // Aumentando threshold para tablets também
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Setting to 120 based on actual extracted frame count
+  // Padronizado para 120 frames conforme solicitado
   const TOTAL_FRAMES = 120; 
-  const TOTAL_FRAMES_SOBRE = 120; // Ajustar depois que o video for extraído
+  const TOTAL_FRAMES_SOBRE = 120;
   
   return (
     <main className="grain min-h-screen relative selection:bg-primary selection:text-black">
@@ -28,9 +28,11 @@ export default function InfoCentroPage() {
         totalFrames={TOTAL_FRAMES}
         height="200vh"
         id="hero"
-        offsetXPercent={isMobile ? -20 : 0}
-        offsetYPercent={isMobile ? -8 : 0}
-        scale={isMobile ? 0.85 : 1}
+        // Removido offsets negativos para evitar o "pulo" e manter o notebook centralizado no mobile
+        offsetXPercent={0} 
+        offsetYPercent={0}
+        scale={isMobile ? 0.8 : 1}
+        step={isMobile ? 2 : 1} // Ativando otimização para mobile
       >
         <div className="absolute inset-0 max-w-7xl mx-auto px-6 pt-20 md:pt-32 h-screen flex flex-col justify-center pointer-events-none">
           <div className="md:w-3/5 pb-20 hero-text-animate pointer-events-auto">
@@ -83,6 +85,7 @@ export default function InfoCentroPage() {
                 totalFrames={TOTAL_FRAMES_SOBRE}
                 mode="inline"
                 scale={0.8}
+                step={isMobile ? 2 : 1} // Ativando otimização para mobile
               />
             </div>
             {/* Overlay amarelo técnico */}
