@@ -9,9 +9,11 @@ export default function InfoCentroPage() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 1024); // Aumentando threshold para tablets também
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
     checkMobile();
     window.addEventListener('resize', checkMobile);
+    // Force a sync of canvas size on initial load to avoid black bars
+    window.dispatchEvent(new Event('resize'));
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
@@ -26,7 +28,7 @@ export default function InfoCentroPage() {
       <FrameSequence
         framesPath="/frames/loop"
         totalFrames={TOTAL_FRAMES}
-        height="200vh"
+        height={isMobile ? "150vh" : "200vh"} // Mais sensível no mobile (menos scroll para terminar)
         id="hero"
         // Removido offsets negativos para evitar o "pulo" e manter o notebook centralizado no mobile
         offsetXPercent={0} 

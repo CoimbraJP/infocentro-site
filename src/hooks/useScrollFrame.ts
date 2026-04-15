@@ -20,7 +20,7 @@ export function useScrollFrame(containerRef: RefObject<HTMLElement | null>, tota
         progress = Math.max(0, Math.min(scrolled / scrollable, 1));
       }
       
-      setCurrentFrame(Math.floor(progress * (totalFrames - 1)));
+      setCurrentFrame(Math.min(totalFrames - 1, Math.floor(progress * totalFrames)));
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
