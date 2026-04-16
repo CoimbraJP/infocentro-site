@@ -105,9 +105,8 @@ export default function FrameSequence({
     // Otimização Crítica para Mobile: Limitar a resolução interna do Canvas
     // Em iPhones, o pixel ratio de 3x pode consumir gigas de RAM em animações de frames.
     // Limitamos a 1.5x no mobile para manter a nitidez mas economizar 50-70% de memória.
-    const isActuallyMobile = window.innerWidth < 1024;
-    // Forçar 1.0 no mobile em todos os devices (Android e iPhone) para fluidez absoluta
-    const dpr = isActuallyMobile ? 1 : window.devicePixelRatio;
+    // Reduzindo DPR para 0.8 no mobile para performance máxima
+    const dpr = isActuallyMobile ? 0.8 : window.devicePixelRatio;
     
     // Cap absoluto de segurança para evitar o erro "A problem occurred repeatedly"
     const MAX_WIDTH = isActuallyMobile ? 1080 : 3840;
@@ -225,8 +224,7 @@ export default function FrameSequence({
           className={`absolute inset-0 w-full h-full block ${canvasClassName}`} 
           style={{ 
             objectFit: 'cover',
-            willChange: 'transform',
-            transform: 'translateZ(0)' // Força aceleração de hardware (GPU)
+            willChange: 'transform'
           }} 
         />
         <div className="absolute inset-0 pointer-events-none"
