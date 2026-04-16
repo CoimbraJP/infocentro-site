@@ -41,6 +41,7 @@ export default function FrameSequence({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const isReadyRef = useRef(false);
+  const lastFrameRef = useRef<number>(-1);
 
   const currentFrame = useScrollFrame(containerRef, totalFrames, mode);
 
@@ -105,7 +106,8 @@ export default function FrameSequence({
     // Em iPhones, o pixel ratio de 3x pode consumir gigas de RAM em animações de frames.
     // Limitamos a 1.5x no mobile para manter a nitidez mas economizar 50-70% de memória.
     const isActuallyMobile = window.innerWidth < 1024;
-    const dpr = isActuallyMobile ? Math.min(window.devicePixelRatio, 1.5) : window.devicePixelRatio;
+    // Forçar 1.0 no mobile em todos os devices (Android e iPhone) para fluidez absoluta
+    const dpr = isActuallyMobile ? 1 : window.devicePixelRatio;
     
     // Cap absoluto de segurança para evitar o erro "A problem occurred repeatedly"
     const MAX_WIDTH = isActuallyMobile ? 1080 : 3840;
@@ -127,10 +129,15 @@ export default function FrameSequence({
   const drawFrame = (frameIndex: number) => {
     const canvas = canvasRef.current;
     
-    // Find the nearest available frame based on step
     const availableIndex = Math.floor(frameIndex / step) * step;
+    
+    // CACHE DE RENDERIZAÇÃO: Evita redundância de desenho se o frame for o mesmo
+    if (availableIndex === lastFrameRef.current) return;
+    
     const img = imagesRef.current[availableIndex];
     if (!canvas || !img || !img.complete || img.naturalWidth === 0) return;
+    
+    lastFrameRef.current = availableIndex;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
@@ -213,7 +220,15 @@ export default function FrameSequence({
   return (
     <section ref={containerRef} id={id} style={{ height }} className="relative w-full bg-black">
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-black">
-        <canvas ref={canvasRef} className={`absolute inset-0 w-full h-full block ${canvasClassName}`} style={{ objectFit: 'cover' }} />
+        <canvas 
+          ref={canvasRef} 
+          className={`absolute inset-0 w-full h-full block ${canvasClassName}`} 
+          style={{ 
+            objectFit: 'cover',
+            willChange: 'transform',
+            transform: 'translateZ(0)' // Força aceleração de hardware (GPU)
+          }} 
+        />
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.9) 100%)' }}
         />
