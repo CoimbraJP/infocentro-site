@@ -54,6 +54,7 @@ export default function FrameSequence({
   };
 
   useEffect(() => {
+    if (disabled) return;
     const images: HTMLImageElement[] = Array(totalFrames).fill(null);
     
     // Only initialize and load images that match the step, UNLESS disabled
@@ -201,7 +202,7 @@ export default function FrameSequence({
   };
 
   useEffect(() => {
-    if (!isReadyRef.current) return;
+    if (disabled || !isReadyRef.current) return;
     requestAnimationFrame(() => {
       drawFrame(currentFrame);
       if (containerRef.current) {
@@ -211,6 +212,7 @@ export default function FrameSequence({
   }, [currentFrame, totalFrames, scale, offsetXPercent, offsetYPercent]);
 
   useEffect(() => {
+    if (disabled) return;
     const onResize = () => {
       syncCanvasSize();
       drawFrame(currentFrame);
@@ -218,6 +220,45 @@ export default function FrameSequence({
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, [currentFrame]);
+
+  if (disabled) {
+    const firstFrameUrl = getFrameUrl(0);
+    
+    if (mode === 'inline') {
+      return (
+        <div id={id} className="relative w-full h-full overflow-hidden">
+          <img 
+            src={firstFrameUrl} 
+            alt="Static frame" 
+            className={`${canvasClassName} w-full h-full object-cover`}
+            style={{
+              transform: `scale(${scale}) translate(${offsetXPercent}%, ${offsetYPercent}%)`,
+            }}
+          />
+          {children}
+        </div>
+      );
+    }
+
+    return (
+      <section id={id} style={{ height: '100vh' }} className="relative w-full bg-black">
+        <div className="relative h-screen w-full overflow-hidden bg-black">
+          <img 
+            src={firstFrameUrl} 
+            alt="Static frame" 
+            className={`absolute inset-0 w-full h-full block object-cover ${canvasClassName}`}
+            style={{
+              transform: `scale(${scale}) translate(${offsetXPercent}%, ${offsetYPercent}%)`,
+            }}
+          />
+          <div className="absolute inset-0 pointer-events-none"
+            style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.9) 100%)' }}
+          />
+          {children}
+        </div>
+      </section>
+    );
+  }
 
   if (mode === 'inline') {
     return (
