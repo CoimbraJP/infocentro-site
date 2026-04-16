@@ -92,7 +92,7 @@ export default function InfoCentroPage() {
                 step={isMobile ? 12 : 1}
                 offsetXPercent={isMobile ? -25 : 0}
                 removeWhiteBg={false}
-                disabled={isMobile}
+                disabled={false}
               />
             </div>
             {/* Overlay amarelo técnico */}

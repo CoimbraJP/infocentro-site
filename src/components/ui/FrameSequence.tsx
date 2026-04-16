@@ -226,13 +226,14 @@ export default function FrameSequence({
     
     if (mode === 'inline') {
       return (
-        <div id={id} className="relative w-full h-full overflow-hidden">
+        <div id={id} className={`relative w-full h-full overflow-hidden ${canvasClassName}`}>
           <img 
             src={firstFrameUrl} 
             alt="Static frame" 
-            className={`${canvasClassName} w-full h-full object-cover`}
+            className="w-full h-full object-cover"
             style={{
-              transform: `scale(${scale}) translate(${offsetXPercent}%, ${offsetYPercent}%)`,
+              objectPosition: `${50 - (offsetXPercent || 0)}% center`,
+              transform: `scale(${scale})`,
             }}
           />
           {children}
@@ -241,14 +242,15 @@ export default function FrameSequence({
     }
 
     return (
-      <section id={id} style={{ height: '100vh' }} className="relative w-full bg-black">
-        <div className="relative h-screen w-full overflow-hidden bg-black">
+      <section id={id} style={{ height: '100vh', backgroundColor: '#fbfbfb' }} className="relative w-full">
+        <div className="relative h-screen w-full overflow-hidden">
           <img 
             src={firstFrameUrl} 
             alt="Static frame" 
             className={`absolute inset-0 w-full h-full block object-cover ${canvasClassName}`}
             style={{
-              transform: `scale(${scale}) translate(${offsetXPercent}%, ${offsetYPercent}%)`,
+              objectPosition: `${50 - (offsetXPercent || 0)}% center`,
+              transform: `scale(${scale})`,
             }}
           />
           <div className="absolute inset-0 pointer-events-none"
