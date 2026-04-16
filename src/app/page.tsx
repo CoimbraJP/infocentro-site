@@ -31,21 +31,21 @@ export default function InfoCentroPage() {
         height={isMobile ? "100vh" : "200vh"} // Altura normal no mobile (sem scroll extra)
         id="hero"
         // Ajuste agressivo de centralização para o mobile estático
-        offsetXPercent={isMobile ? 0 : 0} // Resetado para 0 pois a arte já foi centralizada no Photoshop
+        offsetXPercent={isMobile ? -35 : 0} 
         offsetYPercent={0}
-        scale={isMobile ? 1 : 1} // Resetado para 1 para a arte feita sob medida
+        scale={isMobile ? 0.8 : 1}
         step={isMobile ? 12 : 1} 
         removeWhiteBg={false}
         disabled={isMobile}
-        staticImageUrl={isMobile ? "/mobile-hero.webp" : undefined}
+        staticImageUrl={undefined}
       >
         <div className="absolute inset-0 max-w-7xl mx-auto px-6 pt-20 md:pt-32 h-screen flex flex-col justify-center pointer-events-none">
           <div className="md:w-3/5 pb-20 hero-text-animate pointer-events-auto">
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-tight mb-6 display-font" style={{ textShadow: isMobile ? '0 0 20px rgba(0,0,0,0.9), 0 4px 10px rgba(0,0,0,0.8)' : 'none' }}>
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-tight mb-6 display-font">
               Performance <br />
               <span className="text-primary text-neon transition-all animate-neon-pulse">Elevada ao Máximo.</span>
             </h1>
-            <p className="text-lg md:text-xl text-white/90 max-w-lg mb-8 font-light" style={{ textShadow: isMobile ? '0 2px 8px rgba(0,0,0,1)' : 'none' }}>
+            <p className="text-lg md:text-xl text-white/80 max-w-lg mb-8 font-light">
               Manutenção especializada, montagem de PCs de alto desempenho e suporte técnico que respeita a sua máquina.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
@@ -53,7 +53,7 @@ export default function InfoCentroPage() {
                 FAZER ORÇAMENTO GRÁTIS
                 <LucideArrowRight size={20} />
               </a>
-              <a href="#sobre" className={`px-8 py-4 ${isMobile ? 'bg-black/40' : 'bg-transparent'} border border-white/20 text-white font-medium rounded hover:bg-white/5 transition-colors flex items-center justify-center backdrop-blur-sm`}>
+              <a href="#sobre" className="px-8 py-4 bg-transparent border border-white/20 text-white font-medium rounded hover:bg-white/5 transition-colors flex items-center justify-center">
                 Conheça a INFO Centro
               </a>
             </div>
