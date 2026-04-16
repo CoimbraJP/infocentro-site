@@ -6,7 +6,7 @@ import FrameSequence from '@/components/ui/FrameSequence';
 import { LucideWrench, LucideShieldCheck, LucideServer, LucideCpu, LucideHeartHandshake, LucideArrowRight, LucideCheckCircle2, LucideMessageCircle, LucideCircuitBoard, LucideMonitorSmartphone, LucideChevronDown } from 'lucide-react';
 
 export default function InfoCentroPage() {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth < 1024 : false));
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);

@@ -190,7 +190,7 @@ export default function FrameSequence({
         containerRef.current.style.setProperty('--scroll-progress', (currentFrame / Math.max(1, totalFrames - 1)).toString());
       }
     });
-  }, [currentFrame, totalFrames]);
+  }, [currentFrame, totalFrames, scale, offsetXPercent, offsetYPercent]);
 
   useEffect(() => {
     const onResize = () => {
