@@ -105,6 +105,7 @@ export default function FrameSequence({
     // Otimização Crítica para Mobile: Limitar a resolução interna do Canvas
     // Em iPhones, o pixel ratio de 3x pode consumir gigas de RAM em animações de frames.
     // Limitamos a 1.5x no mobile para manter a nitidez mas economizar 50-70% de memória.
+    const isActuallyMobile = window.innerWidth < 1024;
     // Reduzindo DPR para 0.8 no mobile para performance máxima
     const dpr = isActuallyMobile ? 0.8 : window.devicePixelRatio;
     
