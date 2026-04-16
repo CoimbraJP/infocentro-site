@@ -31,12 +31,13 @@ export default function InfoCentroPage() {
         height={isMobile ? "100vh" : "200vh"} // Altura normal no mobile (sem scroll extra)
         id="hero"
         // Ajuste agressivo de centralização para o mobile estático
-        offsetXPercent={isMobile ? -35 : 0} 
+        offsetXPercent={isMobile ? 0 : 0} // Resetado para 0 pois a arte já foi centralizada no Photoshop
         offsetYPercent={0}
-        scale={isMobile ? 0.8 : 1}
+        scale={isMobile ? 1 : 1} // Resetado para 1 para a arte feita sob medida
         step={isMobile ? 12 : 1} 
         removeWhiteBg={false}
         disabled={isMobile}
+        staticImageUrl={isMobile ? "/mobile-hero.webp" : undefined}
       >
         <div className="absolute inset-0 max-w-7xl mx-auto px-6 pt-20 md:pt-32 h-screen flex flex-col justify-center pointer-events-none">
           <div className="md:w-3/5 pb-20 hero-text-animate pointer-events-auto">

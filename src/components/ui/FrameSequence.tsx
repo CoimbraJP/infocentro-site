@@ -15,10 +15,10 @@ interface FrameSequenceProps {
   canvasClassName?: string;
   removeWhiteBg?: boolean;
   scale?: number;
-  offsetXPercent?: number;
   offsetYPercent?: number;
   step?: number;
   disabled?: boolean;
+  staticImageUrl?: string;
 }
 
 export default function FrameSequence({
@@ -38,6 +38,7 @@ export default function FrameSequence({
   offsetYPercent = 0,
   step = 1,
   disabled = false,
+  staticImageUrl,
 }: FrameSequenceProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -222,17 +223,17 @@ export default function FrameSequence({
   }, [currentFrame]);
 
   if (disabled) {
-    const firstFrameUrl = getFrameUrl(0);
+    const fallbackUrl = staticImageUrl || getFrameUrl(0);
     
     if (mode === 'inline') {
       return (
         <div id={id} className={`relative w-full h-full overflow-hidden ${canvasClassName}`}>
           <img 
-            src={firstFrameUrl} 
+            src={fallbackUrl} 
             alt="Static frame" 
             className="w-full h-full object-cover"
             style={{
-              objectPosition: `${50 - (offsetXPercent || 0)}% center`,
+              objectPosition: staticImageUrl ? 'center' : `${50 - (offsetXPercent || 0)}% center`,
               transform: `scale(${scale})`,
             }}
           />
@@ -245,11 +246,11 @@ export default function FrameSequence({
       <section id={id} style={{ height: '100vh', backgroundColor: '#fbfbfb' }} className="relative w-full">
         <div className="relative h-screen w-full overflow-hidden">
           <img 
-            src={firstFrameUrl} 
+            src={fallbackUrl} 
             alt="Static frame" 
             className={`absolute inset-0 w-full h-full block object-cover ${canvasClassName}`}
             style={{
-              objectPosition: `${50 - (offsetXPercent || 0)}% center`,
+              objectPosition: staticImageUrl ? 'center' : `${50 - (offsetXPercent || 0)}% center`,
               transform: `scale(${scale})`,
             }}
           />
