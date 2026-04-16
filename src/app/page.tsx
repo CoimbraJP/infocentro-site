@@ -31,7 +31,7 @@ export default function InfoCentroPage() {
         height={isMobile ? "150vh" : "200vh"} // Mais sensível no mobile (menos scroll para terminar)
         id="hero"
         // Removido offsets negativos para evitar o "pulo" e manter o notebook centralizado no mobile
-        offsetXPercent={isMobile ? -15 : 0} 
+        offsetXPercent={isMobile ? -35 : 0} 
         offsetYPercent={0}
         scale={isMobile ? 0.8 : 1}
         step={isMobile ? 12 : 1} // Reduzindo para 10 frames no mobile (120 / 12) para ultra-performance
@@ -89,7 +89,7 @@ export default function InfoCentroPage() {
                 mode="inline"
                 scale={0.8}
                 step={isMobile ? 12 : 1} // Reduzindo para 10 frames no mobile
-                offsetXPercent={isMobile ? -10 : 0}
+                offsetXPercent={isMobile ? -25 : 0}
                 removeWhiteBg={false}
               />
             </div>
