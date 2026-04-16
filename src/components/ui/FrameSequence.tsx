@@ -18,6 +18,7 @@ interface FrameSequenceProps {
   offsetXPercent?: number;
   offsetYPercent?: number;
   step?: number;
+  disabled?: boolean;
 }
 
 export default function FrameSequence({
@@ -36,6 +37,7 @@ export default function FrameSequence({
   offsetXPercent = 0,
   offsetYPercent = 0,
   step = 1,
+  disabled = false,
 }: FrameSequenceProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -43,7 +45,8 @@ export default function FrameSequence({
   const isReadyRef = useRef(false);
   const lastFrameRef = useRef<number>(-1);
 
-  const currentFrame = useScrollFrame(containerRef, totalFrames, mode);
+  const currentFrameFromScroll = useScrollFrame(containerRef, totalFrames, mode);
+  const currentFrame = disabled ? 0 : currentFrameFromScroll;
 
   const getFrameUrl = (index: number) => {
     const padded = String(index + 1).padStart(zeroPad, '0');
@@ -53,9 +56,13 @@ export default function FrameSequence({
   useEffect(() => {
     const images: HTMLImageElement[] = Array(totalFrames).fill(null);
     
-    // Only initialize and load images that match the step
-    for (let i = 0; i < totalFrames; i += step) {
-      images[i] = new Image();
+    // Only initialize and load images that match the step, UNLESS disabled
+    if (disabled) {
+      images[0] = new Image();
+    } else {
+      for (let i = 0; i < totalFrames; i += step) {
+        images[i] = new Image();
+      }
     }
     imagesRef.current = images;
 
@@ -74,15 +81,19 @@ export default function FrameSequence({
           syncCanvasSize();
           drawFrame(0);
         }
-        if (loaded === initialBatch.length) {
+        if (!disabled && loaded === initialBatch.length) {
           isReadyRef.current = true;
           drawFrame(currentFrame);
+        } else if (disabled && loaded === 1) {
+          isReadyRef.current = true;
+          drawFrame(0);
         }
       };
       images[i].src = getFrameUrl(i);
     });
 
     const loadRest = () => {
+      if (disabled) return; // Não carrega mais nada no mobile
       for (let i = BATCH1_END; i < totalFrames; i++) {
         if (images[i]) {
           images[i].src = getFrameUrl(i);

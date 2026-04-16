@@ -28,14 +28,15 @@ export default function InfoCentroPage() {
       <FrameSequence
         framesPath="/frames/loop"
         totalFrames={TOTAL_FRAMES}
-        height={isMobile ? "150vh" : "200vh"} // Mais sensível no mobile (menos scroll para terminar)
+        height={isMobile ? "100vh" : "200vh"} // Altura normal no mobile (sem scroll extra)
         id="hero"
-        // Removido offsets negativos para evitar o "pulo" e manter o notebook centralizado no mobile
+        // Ajuste agressivo de centralização para o mobile estático
         offsetXPercent={isMobile ? -35 : 0} 
         offsetYPercent={0}
         scale={isMobile ? 0.8 : 1}
-        step={isMobile ? 24 : 1} // Reduzindo para 5 frames no mobile (120 / 24) para performance ultra-eco
+        step={isMobile ? 12 : 1} 
         removeWhiteBg={false}
+        disabled={isMobile}
       >
         <div className="absolute inset-0 max-w-7xl mx-auto px-6 pt-20 md:pt-32 h-screen flex flex-col justify-center pointer-events-none">
           <div className="md:w-3/5 pb-20 hero-text-animate pointer-events-auto">
@@ -88,9 +89,10 @@ export default function InfoCentroPage() {
                 totalFrames={TOTAL_FRAMES_SOBRE}
                 mode="inline"
                 scale={0.8}
-                step={isMobile ? 24 : 1} // Reduzindo para 5 frames no mobile
+                step={isMobile ? 12 : 1}
                 offsetXPercent={isMobile ? -25 : 0}
                 removeWhiteBg={false}
+                disabled={isMobile}
               />
             </div>
             {/* Overlay amarelo técnico */}
