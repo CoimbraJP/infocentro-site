@@ -15,6 +15,7 @@ interface FrameSequenceProps {
   canvasClassName?: string;
   removeWhiteBg?: boolean;
   scale?: number;
+  offsetXPercent?: number;
   offsetYPercent?: number;
   step?: number;
   disabled?: boolean;
