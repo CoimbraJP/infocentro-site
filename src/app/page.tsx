@@ -34,7 +34,7 @@ export default function InfoCentroPage() {
         offsetXPercent={0} 
         offsetYPercent={0}
         scale={isMobile ? 0.8 : 1}
-        step={isMobile ? 4 : 1} // Reduzindo para 30 frames no mobile (120 / 4) para ultra-performance
+        step={isMobile ? 3 : 1} // Reduzindo para 40 frames no mobile (120 / 3) para ultra-performance
       >
         <div className="absolute inset-0 max-w-7xl mx-auto px-6 pt-20 md:pt-32 h-screen flex flex-col justify-center pointer-events-none">
           <div className="md:w-3/5 pb-20 hero-text-animate pointer-events-auto">
@@ -87,7 +87,7 @@ export default function InfoCentroPage() {
                 totalFrames={TOTAL_FRAMES_SOBRE}
                 mode="inline"
                 scale={0.8}
-                step={isMobile ? 4 : 1} // Reduzindo para 30 frames no mobile
+                step={isMobile ? 3 : 1} // Reduzindo para 40 frames no mobile
               />
             </div>
             {/* Overlay amarelo técnico */}

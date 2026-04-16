@@ -13,7 +13,6 @@ interface FrameSequenceProps {
   id?: string;
   mode?: 'sticky' | 'inline';
   canvasClassName?: string;
-  removeWhiteBg?: boolean;
   scale?: number;
   offsetXPercent?: number;
   offsetYPercent?: number;
@@ -31,7 +30,6 @@ export default function FrameSequence({
   id,
   mode = 'sticky',
   canvasClassName = '',
-  removeWhiteBg = false,
   scale = 1,
   offsetXPercent = 0,
   offsetYPercent = 0,
@@ -156,24 +154,8 @@ export default function FrameSequence({
     const finalOffsetY = offsetY - (finalH - drawH) / 2 + (canvas.height * (offsetYPercent / 100));
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Draw the main image
+    // Draw the main image (already transparent from Python processing)
     ctx.drawImage(img, finalOffsetX, finalOffsetY, finalW, finalH);
-    
-    // Pixel processor: Remove White Background (Chroma-key white)
-    if (removeWhiteBg) {
-      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imgData.data;
-      for (let i = 0; i < data.length; i += 4) {
-        const r = data[i], g = data[i + 1], b = data[i + 2];
-        if (r > 245 && g > 245 && b > 245) {
-          data[i + 3] = 0; // Make pure white transparent
-        } else if (r > 220 && g > 220 && b > 220) {
-          // Soft blending magic to erase halos around white edges
-          data[i + 3] = Math.max(0, (255 - r) * 5); 
-        }
-      }
-      ctx.putImageData(imgData, 0, 0);
-    }
     
     // Add a dark overlay only if it's the hero mode
     if (mode === 'sticky') {
@@ -204,7 +186,7 @@ export default function FrameSequence({
   if (mode === 'inline') {
     return (
       <div ref={containerRef} id={id} className="relative w-full h-full">
-        <canvas ref={canvasRef} className={canvasClassName || "absolute inset-0 w-full h-full"} />
+        <canvas ref={canvasRef} className={canvasClassName || "absolute inset-0 w-full h-full"} style={{ willChange: 'transform' }} />
         {children}
       </div>
     );
@@ -213,7 +195,7 @@ export default function FrameSequence({
   return (
     <section ref={containerRef} id={id} style={{ height }} className="relative w-full bg-black">
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-black">
-        <canvas ref={canvasRef} className={`absolute inset-0 w-full h-full block ${canvasClassName}`} style={{ objectFit: 'cover' }} />
+        <canvas ref={canvasRef} className={`absolute inset-0 w-full h-full block ${canvasClassName}`} style={{ objectFit: 'cover', willChange: 'transform' }} />
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.9) 100%)' }}
         />
