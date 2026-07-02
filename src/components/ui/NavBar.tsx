@@ -22,7 +22,7 @@ export default function NavBar() {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+    <nav aria-label="Navegação principal" className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       scrolled ? 'bg-surface backdrop-blur-md border-b border-white/5 shadow-2xl' : 'bg-transparent'
     }`}>
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -46,8 +46,14 @@ export default function NavBar() {
           </a>
         </div>
         
-        {/* Mobile toggle */}
-        <button className="md:hidden flex flex-col gap-1.5 w-6" onClick={() => setMenuOpen(!menuOpen)}>
+        {/* Mobile toggle — padding + margem negativa dao os 44px de area de toque sem mudar o layout */}
+        <button
+          className="md:hidden flex flex-col gap-1.5 w-6 box-content p-2.5 -m-2.5"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
+          aria-expanded={menuOpen}
+          aria-controls="menu-mobile"
+        >
           <span className={`block h-0.5 bg-white transition-all ${menuOpen ? 'rotate-45 translate-y-[8px]' : ''}`} />
           <span className={`block h-0.5 bg-white transition-all ${menuOpen ? 'opacity-0' : ''}`} />
           <span className={`block h-0.5 bg-white transition-all ${menuOpen ? '-rotate-45 -translate-y-[8px]' : ''}`} />
@@ -56,7 +62,7 @@ export default function NavBar() {
       
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden bg-[#050505] px-6 py-6 flex flex-col gap-6 border-b border-white/10">
+        <div id="menu-mobile" className="md:hidden bg-[#050505] px-6 py-6 flex flex-col gap-6 border-b border-white/10">
           {links.map(l => (
             <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)}
               className="text-sm font-bold tracking-wider text-white/70 hover:text-white">

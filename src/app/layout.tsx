@@ -89,8 +89,9 @@ export default function RootLayout({
         {children}
         <a 
           href={WHATSAPP_DUVIDA}
-          target="_blank" 
-          rel="noopener noreferrer" 
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Falar com a INFO Centro no WhatsApp"
           className="fixed bottom-6 right-6 p-4 bg-[#25D366] text-white rounded-full shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:scale-110 transition-transform z-50 animate-pulse border border-white/20"
         >
           <LucideMessageCircle size={32} />

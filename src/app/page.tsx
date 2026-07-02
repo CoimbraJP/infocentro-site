@@ -74,8 +74,8 @@ export default function InfoCentroPage() {
       <section id="sobre" className="py-32 bg-black relative z-10 border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
           <div>
-            <h2 className="tracking-widest text-sm font-semibold uppercase mb-4 text-primary">Quem Somos</h2>
-            <h3 className="text-3xl md:text-5xl font-bold mb-6 display-font leading-tight">Autoridade em hardware. <br/> Excelência em serviço.</h3>
+            <p className="tracking-widest text-sm font-semibold uppercase mb-4 text-primary">Quem Somos</p>
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 display-font leading-tight">Autoridade em hardware. <br/> Excelência em serviço.</h2>
             <p className="text-white/70 text-lg mb-6 leading-relaxed">
               Desde 1991, a INFO Centro é referência em manutenção de notebooks, entregando diagnósticos precisos e soluções eficientes para cada cliente.
             </p>
@@ -112,8 +112,8 @@ export default function InfoCentroPage() {
       <section id="servicos" className="py-32 bg-[#0a0a0a] relative z-10">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center md:text-left mb-16">
-            <h2 className="tracking-widest text-sm font-semibold uppercase mb-4 text-primary">Nossos Serviços</h2>
-            <h3 className="text-3xl md:text-5xl font-bold display-font">Soluções completas</h3>
+            <p className="tracking-widest text-sm font-semibold uppercase mb-4 text-primary">Nossos Serviços</p>
+            <h2 className="text-3xl md:text-5xl font-bold display-font">Soluções completas</h2>
           </div>
           
           <div className="grid md:grid-cols-3 gap-6">
@@ -127,7 +127,7 @@ export default function InfoCentroPage() {
             ].map((srv, idx) => (
               <div key={idx} className="bg-surface p-8 rounded-xl border border-white/5 hover:border-primary/50 transition-colors group">
                 <srv.icon size={40} className="text-primary mb-6 group-hover:scale-110 transition-transform" />
-                <h4 className="text-xl font-bold mb-3 display-font">{srv.title}</h4>
+                <h3 className="text-xl font-bold mb-3 display-font">{srv.title}</h3>
                 <p className="text-white/60 leading-relaxed">{srv.desc}</p>
               </div>
             ))}
@@ -138,7 +138,7 @@ export default function InfoCentroPage() {
       <section id="qualidade" className="py-32 bg-black relative z-10 border-t border-white/5">
         <div className="max-w-4xl mx-auto px-6 text-center">
             <LucideHeartHandshake size={60} className="text-primary mx-auto mb-8" />
-            <h3 className="text-3xl md:text-5xl font-bold mb-8 display-font">Sua máquina em boas mãos.</h3>
+            <h2 className="text-3xl md:text-5xl font-bold mb-8 display-font">Sua máquina em boas mãos.</h2>
             <p className="text-xl text-white/70 leading-relaxed mb-12">
               Nós sabemos que seu computador é sua ferramenta de trabalho ou lazer principal. 
               Por isso, levamos a segurança e o cuidado muito a sério. Testes de stress após 
@@ -150,8 +150,8 @@ export default function InfoCentroPage() {
       <section id="videos" className="py-24 bg-black relative z-10 border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="tracking-widest text-sm font-semibold uppercase mb-4 text-primary">Acompanhe nosso trabalho</h2>
-            <h3 className="text-3xl md:text-5xl font-bold display-font">Shorts e Dicas Rápidas</h3>
+            <p className="tracking-widest text-sm font-semibold uppercase mb-4 text-primary">Acompanhe nosso trabalho</p>
+            <h2 className="text-3xl md:text-5xl font-bold display-font">Shorts e Dicas Rápidas</h2>
           </div>
           <div className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory flex-nowrap scrollbar-hide" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
             {[
@@ -161,10 +161,10 @@ export default function InfoCentroPage() {
               "0cO183D6AZM"
             ].map((videoId, item) => (
               <div key={item} className="snap-center shrink-0 w-72 aspect-[9/16] bg-surface rounded-2xl border border-white/10 glow-neon overflow-hidden relative group">
-                <iframe 
-                  src={`https://www.youtube.com/embed/${videoId}?controls=0&rel=0`} 
-                  className="absolute inset-0 w-full h-full object-cover" 
-                  title="YouTube video player" 
+                <iframe
+                  src={`https://www.youtube.com/embed/${videoId}?controls=0&rel=0`}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  title={`Short da INFO Centro no YouTube (${item + 1} de 4)`}
                   allowFullScreen>
                 </iframe>
               </div>
@@ -176,11 +176,11 @@ export default function InfoCentroPage() {
       <section id="avaliacoes" className="py-24 bg-[#0a0a0a] relative z-10 border-t border-white/5">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex flex-col items-center mb-16">
-            <h3 className="text-3xl md:text-5xl font-bold display-font mb-4 text-center">O que dizem nossos clientes</h3>
+            <h2 className="text-3xl md:text-5xl font-bold display-font mb-4 text-center">O que dizem nossos clientes</h2>
             <div className="flex items-center gap-2 mb-4">
               <span className="text-5xl font-bold">4.9</span>
               <div className="flex flex-col">
-                <div className="flex text-yellow-500 text-xl">★★★★★</div>
+                <div className="flex text-yellow-500 text-xl" role="img" aria-label="Nota 4,9 de 5 estrelas">★★★★★</div>
                 <span className="text-white/60 text-sm">Baseado no Google Meu Negócio</span>
               </div>
             </div>
@@ -195,14 +195,14 @@ export default function InfoCentroPage() {
                     <div className="flex items-center gap-4 mb-6">
                       <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold text-xl">{dep.nome.charAt(0)}</div>
                       <div>
-                        <h4 className="font-bold text-white/90">{dep.nome}</h4>
+                        <p className="font-bold text-white/90">{dep.nome}</p>
                         <span className="text-sm text-white/40">{dep.time}</span>
                       </div>
                       <div className="absolute top-8 right-8 w-6 h-6 rounded-full bg-white flex items-center justify-center">
                         <span className="text-blue-600 font-bold text-sm tracking-tighter" style={{fontFamily: 'serif'}}>G</span>
                       </div>
                     </div>
-                    <div className="flex text-yellow-500 mb-4 text-sm">★★★★★</div>
+                    <div className="flex text-yellow-500 mb-4 text-sm" role="img" aria-label="5 de 5 estrelas">★★★★★</div>
                     <p className="text-white/70 leading-relaxed italic">"{dep.review}"</p>
                   </div>
                 </div>
@@ -223,7 +223,7 @@ export default function InfoCentroPage() {
 
       <section id="faq" className="py-24 bg-black relative z-10">
         <div className="max-w-3xl mx-auto px-6">
-          <h3 className="text-3xl font-bold mb-12 text-center display-font">Dúvidas Frequentes</h3>
+          <h2 className="text-3xl font-bold mb-12 text-center display-font">Dúvidas Frequentes</h2>
           <div className="space-y-4">
             {[
               { q: "Meu notebook está muito lento. Vale a pena arrumar?", a: "Na maioria dos casos, sim. Com upgrades simples como SSD e memória, é possível recuperar e ate superar performance de modelos novos." },
@@ -236,7 +236,7 @@ export default function InfoCentroPage() {
               { q: "Vocês fazem upgrade em notebook antigo?", a: "Sim. Avaliamos o equipamento e indicamos melhorias que realmente fazem diferença no uso." }
             ].map((faq, i) => (
               <details key={i} className="group bg-surface rounded-lg border border-white/5 cursor-pointer transition-all hover:border-primary/30">
-                <summary className="flex justify-between items-center p-6 font-bold text-lg list-none outline-none [&::-webkit-details-marker]:hidden">
+                <summary className="flex justify-between items-center p-6 font-bold text-lg list-none rounded-lg outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&::-webkit-details-marker]:hidden">
                   {faq.q}
                   <LucideChevronDown className="transition-transform duration-300 group-open:rotate-180 text-primary flex-shrink-0 ml-4" size={24} />
                 </summary>
@@ -251,7 +251,7 @@ export default function InfoCentroPage() {
 
       <section id="contato" className="py-32 bg-primary relative z-10">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h3 className="text-4xl md:text-6xl font-bold text-black mb-6 display-font tracking-tight">Precisa de um up na sua máquina?</h3>
+          <h2 className="text-4xl md:text-6xl font-bold text-black mb-6 display-font tracking-tight">Precisa de um up na sua máquina?</h2>
           <p className="text-[#222222] text-xl font-medium mb-10 max-w-2xl mx-auto">
             Fale diretamente com nossa equipe técnica pelo WhatsApp. Resposta rápida e orçamento transparente.
           </p>
@@ -266,7 +266,7 @@ export default function InfoCentroPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row gap-12 items-center">
             <div className="w-full md:w-1/3">
-              <h3 className="text-3xl font-bold mb-6 display-font text-primary">Nossa Loja</h3>
+              <h2 className="text-3xl font-bold mb-6 display-font text-primary">Nossa Loja</h2>
               <p className="text-white/70 text-lg mb-4 leading-relaxed">
                 Estamos localizados no coração de São José dos Campos, prontos para atender você e sua máquina.
               </p>
@@ -306,11 +306,11 @@ export default function InfoCentroPage() {
           <div className="font-mono text-xl font-bold tracking-tighter text-primary">
             <span className="text-white">INFO</span> Centro
           </div>
-          <div className="text-white/50 text-sm text-center">
-            <p className="mb-1">Rua Rubiao Junior, 33 - Centro</p>
+          <address className="text-white/50 text-sm text-center not-italic">
+            <p className="mb-1">Rua Rubião Júnior, 33 - Centro</p>
             <p className="mb-1">Seg a Sex: 09h às 18h | Sáb: 09h às 13h</p>
             <p className="font-bold text-primary">WhatsApp: (12) 98200-7553</p>
-          </div>
+          </address>
           <div className="text-white/40 text-sm md:text-right">
             &copy; {new Date().getFullYear()} INFO Centro. <br className="hidden md:block" /> Todos os direitos reservados.
           </div>

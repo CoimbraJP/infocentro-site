@@ -204,7 +204,7 @@ export default function FrameSequence({
   if (mode === 'inline') {
     return (
       <div ref={containerRef} id={id} className="relative w-full h-full">
-        <canvas ref={canvasRef} className={canvasClassName || "absolute inset-0 w-full h-full"} />
+        <canvas ref={canvasRef} aria-hidden="true" className={canvasClassName || "absolute inset-0 w-full h-full"} />
         {children}
       </div>
     );
@@ -213,7 +213,7 @@ export default function FrameSequence({
   return (
     <section ref={containerRef} id={id} style={{ height }} className="relative w-full bg-black">
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-black">
-        <canvas ref={canvasRef} className={`absolute inset-0 w-full h-full block ${canvasClassName}`} style={{ objectFit: 'cover' }} />
+        <canvas ref={canvasRef} aria-hidden="true" className={`absolute inset-0 w-full h-full block ${canvasClassName}`} style={{ objectFit: 'cover' }} />
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.9) 100%)' }}
         />
