@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import { LucideMessageCircle } from "lucide-react";
+import { WHATSAPP_DUVIDA } from "@/lib/site";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -21,7 +22,7 @@ export default function RootLayout({
       <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans bg-black text-white antialiased`}>
         {children}
         <a 
-          href="https://wa.me/5512982007553?text=Ol%C3%A1,%20gostaria%20de%20dúvidas." 
+          href={WHATSAPP_DUVIDA}
           target="_blank" 
           rel="noopener noreferrer" 
           className="fixed bottom-6 right-6 p-4 bg-[#25D366] text-white rounded-full shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:scale-110 transition-transform z-50 animate-pulse border border-white/20"

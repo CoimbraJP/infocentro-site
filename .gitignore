@@ -32,4 +32,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-.vercel
+# videos-fonte e backups de frames (pesados, fora do repo)
+/MOVIES/
+/frames-backup/

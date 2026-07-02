@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { WHATSAPP_ORCAMENTO } from '@/lib/site';
 
 export default function NavBar() {
   const [scrolled, setScrolled] = useState(false);
@@ -37,7 +38,7 @@ export default function NavBar() {
             </a>
           ))}
           <a
-            href="https://wa.me/5512982007553?text=Ol%C3%A1,%20gostaria%20de%20um%20or%C3%A7amento."
+            href={WHATSAPP_ORCAMENTO}
             target="_blank" rel="noopener noreferrer"
             className="ml-4 px-5 py-2.5 bg-primary text-black font-semibold text-sm rounded glow-neon hover:bg-[#cce600] transition-all"
           >
@@ -63,7 +64,7 @@ export default function NavBar() {
             </a>
           ))}
           <a
-            href="https://wa.me/5512982007553?text=Ol%C3%A1,%20gostaria%20de%20um%20or%C3%A7amento."
+            href={WHATSAPP_ORCAMENTO}
             target="_blank" rel="noopener noreferrer"
             onClick={() => setMenuOpen(false)}
             className="text-center px-5 py-3 bg-primary text-black font-semibold text-sm rounded shadow-none w-full"

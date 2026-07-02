@@ -16,15 +16,6 @@ const config: Config = {
         accent1: "var(--color-accent1)",
         accent2: "var(--color-accent2)",
       },
-      keyframes: {
-        carousel: {
-          '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(-50%)' },
-        }
-      },
-      animation: {
-        carousel: 'carousel 40s linear infinite',
-      }
     },
   },
   plugins: [],

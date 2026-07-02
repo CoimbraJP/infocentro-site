@@ -1,9 +1,20 @@
 'use client';
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 import NavBar from '@/components/ui/NavBar';
 import FrameSequence from '@/components/ui/FrameSequence';
+import { WHATSAPP_ORCAMENTO } from '@/lib/site';
 import { LucideWrench, LucideShieldCheck, LucideServer, LucideCpu, LucideHeartHandshake, LucideArrowRight, LucideCheckCircle2, LucideMessageCircle, LucideCircuitBoard, LucideMonitorSmartphone, LucideChevronDown } from 'lucide-react';
+
+const REVIEWS = [
+  { nome: "Carlos Eduardo", review: "Atendimento impecável! Meu notebook gamer estava esquentando muito. Fizeram a preventiva e agora parece novo. Recomendo demais!", time: "Há 1 semana" },
+  { nome: "Mariana Silva", review: "Levei meu PC que não ligava por nada. Descobriram que era um curto na placa mãe e resolveram rápido e com preço justo.", time: "Há 2 meses" },
+  { nome: "João Pedro", review: "Formataram minha máquina no mesmo dia. Transparência total e ainda fizeram o backup de todos os meus arquivos de trabalho sem perder nada.", time: "Há 3 meses" },
+  { nome: "Lucas Mendes", review: "Montaram meu PC Gamer e o cable management ficou absurdo de tão limpo. Pessoal muito técnico e caprichoso.", time: "Há 4 meses" },
+  { nome: "Aline Costa", review: "Meu notebook derramou café, achei que tinha perdido. A INFO Centro salvou a placa mãe! Super recomendo.", time: "Há 5 meses" },
+  { nome: "Felipe Borges", review: "Troca de tela e teclado. Peças originais de ótima qualidade. Serviço muito rápido e pontual.", time: "Há 6 meses" },
+  { nome: "Roberto Nunes", review: "A loja passa muita confiança! O diagnóstico foi preciso e não tentaram empurrar serviços desnecessários.", time: "Há 8 meses" },
+  { nome: "Juliana Castro", review: "Fiz um upgrade de SSD na minha máquina antiga e deu vida nova pra ela. Não trava e liga em segundos!", time: "Há 1 ano" }
+];
 
 export default function InfoCentroPage() {
   const [isMobile, setIsMobile] = useState(false);
@@ -47,7 +58,7 @@ export default function InfoCentroPage() {
               Manutenção especializada, montagem de PCs de alto desempenho e suporte técnico que respeita a sua máquina.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <a href="https://wa.me/5512982007553?text=Ol%C3%A1,%20gostaria%20de%20um%20or%C3%A7amento." target="_blank" rel="noopener noreferrer" className="px-8 py-4 bg-primary text-black font-bold rounded shadow-lg glow-neon hover:bg-[#cce600] transition-colors flex items-center justify-center gap-2">
+              <a href={WHATSAPP_ORCAMENTO} target="_blank" rel="noopener noreferrer" className="px-8 py-4 bg-primary text-black font-bold rounded shadow-lg glow-neon hover:bg-[#cce600] transition-colors flex items-center justify-center gap-2">
                 FAZER ORÇAMENTO GRÁTIS
                 <LucideArrowRight size={20} />
               </a>
@@ -63,7 +74,7 @@ export default function InfoCentroPage() {
       <section id="sobre" className="py-32 bg-black relative z-10 border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
           <div>
-            <h2 className="text-secondary tracking-widest text-sm font-semibold uppercase mb-4 text-primary">Quem Somos</h2>
+            <h2 className="tracking-widest text-sm font-semibold uppercase mb-4 text-primary">Quem Somos</h2>
             <h3 className="text-3xl md:text-5xl font-bold mb-6 display-font leading-tight">Autoridade em hardware. <br/> Excelência em serviço.</h3>
             <p className="text-white/70 text-lg mb-6 leading-relaxed">
               Desde 1991, a INFO Centro é referência em manutenção de notebooks, entregando diagnósticos precisos e soluções eficientes para cada cliente.
@@ -101,7 +112,7 @@ export default function InfoCentroPage() {
       <section id="servicos" className="py-32 bg-[#0a0a0a] relative z-10">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center md:text-left mb-16">
-            <h2 className="text-secondary tracking-widest text-sm font-semibold uppercase mb-4 text-primary">Nossos Serviços</h2>
+            <h2 className="tracking-widest text-sm font-semibold uppercase mb-4 text-primary">Nossos Serviços</h2>
             <h3 className="text-3xl md:text-5xl font-bold display-font">Soluções completas</h3>
           </div>
           
@@ -139,7 +150,7 @@ export default function InfoCentroPage() {
       <section id="videos" className="py-24 bg-black relative z-10 border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-secondary tracking-widest text-sm font-semibold uppercase mb-4 text-primary">Acompanhe nosso trabalho</h2>
+            <h2 className="tracking-widest text-sm font-semibold uppercase mb-4 text-primary">Acompanhe nosso trabalho</h2>
             <h3 className="text-3xl md:text-5xl font-bold display-font">Shorts e Dicas Rápidas</h3>
           </div>
           <div className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory flex-nowrap scrollbar-hide" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
@@ -177,25 +188,8 @@ export default function InfoCentroPage() {
           
           <div className="relative overflow-hidden mb-12 w-full group">
             <div className="animate-infinite-scroll flex flex-row flex-nowrap w-max gap-6 py-4">
-              {[
-                {nome: "Carlos Eduardo", review: "Atendimento impecável! Meu notebook gamer estava esquentando muito. Fizeram a preventiva e agora parece novo. Recomendo demais!", time: "Há 1 semana"},
-                {nome: "Mariana Silva", review: "Levei meu PC que não ligava por nada. Descobriram que era um curto na placa mãe e resolveram rápido e com preço justo.", time: "Há 2 meses"},
-                {nome: "João Pedro", review: "Formataram minha máquina no mesmo dia. Transparência total e ainda fizeram o backup de todos os meus arquivos de trabalho sem perder nada.", time: "Há 3 meses"},
-                {nome: "Lucas Mendes", review: "Montaram meu PC Gamer e o cable management ficou absurdo de tão limpo. Pessoal muito técnico e caprichoso.", time: "Há 4 meses"},
-                {nome: "Aline Costa", review: "Meu notebook derramou café, achei que tinha perdido. A INFO Centro salvou a placa mãe! Super recomendo.", time: "Há 5 meses"},
-                {nome: "Felipe Borges", review: "Troca de tela e teclado. Peças originais de ótima qualidade. Serviço muito rápido e pontual.", time: "Há 6 meses"},
-                {nome: "Roberto Nunes", review: "A loja passa muita confiança! O diagnóstico foi preciso e não tentaram empurrar serviços desnecessários.", time: "Há 8 meses"},
-                {nome: "Juliana Castro", review: "Fiz um upgrade de SSD na minha máquina antiga e deu vida nova pra ela. Não trava e liga em segundos!", time: "Há 1 ano"},
-                // Duplicated for seamless infinite loop
-                {nome: "Carlos Eduardo", review: "Atendimento impecável! Meu notebook gamer estava esquentando muito. Fizeram a preventiva e agora parece novo. Recomendo demais!", time: "Há 1 semana"},
-                {nome: "Mariana Silva", review: "Levei meu PC que não ligava por nada. Descobriram que era um curto na placa mãe e resolveram rápido e com preço justo.", time: "Há 2 meses"},
-                {nome: "João Pedro", review: "Formataram minha máquina no mesmo dia. Transparência total e ainda fizeram o backup de todos os meus arquivos de trabalho sem perder nada.", time: "Há 3 meses"},
-                {nome: "Lucas Mendes", review: "Montaram meu PC Gamer e o cable management ficou absurdo de tão limpo. Pessoal muito técnico e caprichoso.", time: "Há 4 meses"},
-                {nome: "Aline Costa", review: "Meu notebook derramou café, achei que tinha perdido. A INFO Centro salvou a placa mãe! Super recomendo.", time: "Há 5 meses"},
-                {nome: "Felipe Borges", review: "Troca de tela e teclado. Peças originais de ótima qualidade. Serviço muito rápido e pontual.", time: "Há 6 meses"},
-                {nome: "Roberto Nunes", review: "A loja passa muita confiança! O diagnóstico foi preciso e não tentaram empurrar serviços desnecessários.", time: "Há 8 meses"},
-                {nome: "Juliana Castro", review: "Fiz um upgrade de SSD na minha máquina antiga e deu vida nova pra ela. Não trava e liga em segundos!", time: "Há 1 ano"}
-              ].map((dep, i) => (
+              {/* Lista duplicada para o loop infinito parecer contínuo */}
+              {[...REVIEWS, ...REVIEWS].map((dep, i) => (
                 <div key={i} className="bg-surface p-8 rounded-2xl border border-white/5 relative flex flex-col justify-between w-[380px] shrink-0">
                   <div>
                     <div className="flex items-center gap-4 mb-6">
@@ -261,7 +255,7 @@ export default function InfoCentroPage() {
           <p className="text-[#222222] text-xl font-medium mb-10 max-w-2xl mx-auto">
             Fale diretamente com nossa equipe técnica pelo WhatsApp. Resposta rápida e orçamento transparente.
           </p>
-          <a href="https://wa.me/5512982007553?text=Ol%C3%A1,%20gostaria%20de%20um%20or%C3%A7amento." target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 px-10 py-5 bg-black text-primary text-lg font-bold rounded shadow-2xl hover:bg-neutral-900 transition-all animate-scale-pulse">
+          <a href={WHATSAPP_ORCAMENTO} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 px-10 py-5 bg-black text-primary text-lg font-bold rounded shadow-2xl hover:bg-neutral-900 transition-all animate-scale-pulse">
             <LucideMessageCircle size={24} />
             CHAMAR NO WHATSAPP
           </a>
