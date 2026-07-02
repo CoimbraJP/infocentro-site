@@ -196,7 +196,7 @@ export default function InfoCentroPage() {
                       <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold text-xl">{dep.nome.charAt(0)}</div>
                       <div>
                         <p className="font-bold text-white/90">{dep.nome}</p>
-                        <span className="text-sm text-white/40">{dep.time}</span>
+                        <span className="text-sm text-white/60">{dep.time}</span>
                       </div>
                       <div className="absolute top-8 right-8 w-6 h-6 rounded-full bg-white flex items-center justify-center">
                         <span className="text-blue-600 font-bold text-sm tracking-tighter" style={{fontFamily: 'serif'}}>G</span>
@@ -306,12 +306,12 @@ export default function InfoCentroPage() {
           <div className="font-mono text-xl font-bold tracking-tighter text-primary">
             <span className="text-white">INFO</span> Centro
           </div>
-          <address className="text-white/50 text-sm text-center not-italic">
+          <address className="text-white/60 text-sm text-center not-italic">
             <p className="mb-1">Rua Rubião Júnior, 33 - Centro</p>
             <p className="mb-1">Seg a Sex: 09h às 18h | Sáb: 09h às 13h</p>
             <p className="font-bold text-primary">WhatsApp: (12) 98200-7553</p>
           </address>
-          <div className="text-white/40 text-sm md:text-right">
+          <div className="text-white/60 text-sm md:text-right">
             &copy; {new Date().getFullYear()} INFO Centro. <br className="hidden md:block" /> Todos os direitos reservados.
           </div>
         </div>
