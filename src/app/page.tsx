@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import NavBar from '@/components/ui/NavBar';
 import FrameSequence from '@/components/ui/FrameSequence';
+import YouTubeFacade from '@/components/ui/YouTubeFacade';
 import { WHATSAPP_ORCAMENTO } from '@/lib/site';
 import { LucideWrench, LucideShieldCheck, LucideServer, LucideCpu, LucideHeartHandshake, LucideArrowRight, LucideCheckCircle2, LucideMessageCircle, LucideCircuitBoard, LucideMonitorSmartphone, LucideChevronDown } from 'lucide-react';
 
@@ -161,12 +162,10 @@ export default function InfoCentroPage() {
               "0cO183D6AZM"
             ].map((videoId, item) => (
               <div key={item} className="snap-center shrink-0 w-72 aspect-[9/16] bg-surface rounded-2xl border border-white/10 glow-neon overflow-hidden relative group">
-                <iframe
-                  src={`https://www.youtube.com/embed/${videoId}?controls=0&rel=0`}
-                  className="absolute inset-0 w-full h-full object-cover"
+                <YouTubeFacade
+                  videoId={videoId}
                   title={`Short da INFO Centro no YouTube (${item + 1} de 4)`}
-                  allowFullScreen>
-                </iframe>
+                />
               </div>
             ))}
           </div>
