@@ -102,6 +102,11 @@ body {
   animation: scroll 40s linear infinite;
 }
 
+/* WCAG 2.2.2: conteudo em movimento precisa ser pausavel */
+.animate-infinite-scroll:hover {
+  animation-play-state: paused;
+}
+
 @supports (animation-timeline: view()) {
   .parallax-drop {
     animation: dropParallax linear both;
@@ -113,6 +118,23 @@ body {
 @keyframes dropParallax {
   0% { transform: translateY(-100px) scale(0.95); opacity: 0; box-shadow: 0 -20px 50px rgba(0,0,0,0.5); }
   100% { transform: translateY(0) scale(1); opacity: 1; box-shadow: 0 0 0 rgba(0,0,0,0); }
+}
+
+/* Sem movimento autonomo para quem pediu reducao de movimento.
+   Os keyframes de entrada (dropdownFade, dropParallax) terminam no estado
+   natural do elemento, entao animation:none apenas mostra o estado final. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  .animate-neon-pulse,
+  .animate-scale-pulse,
+  .animate-infinite-scroll,
+  .animate-dropdown,
+  .scroll-bounce,
+  .parallax-drop {
+    animation: none !important;
+  }
 }
 
 /* Scrollbar */
