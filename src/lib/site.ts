@@ -1,5 +1,5 @@
-// TODO: trocar pelo dominio definitivo quando ele estiver apontado
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://infocentro-site.vercel.app';
+// dominio canonico (o apex infocentrosjc.com.br redireciona para www)
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.infocentrosjc.com.br';
 
 export const WHATSAPP_NUMBER = '5512982007553';
 
