@@ -17,8 +17,8 @@ export default function NavBar() {
     { href: '#servicos', label: 'SERVIÇOS' },
     { href: '#videos', label: 'VÍDEOS' },
     { href: '#avaliacoes', label: 'AVALIAÇÕES' },
-    { href: '#localizacao', label: 'LOCALIZAÇÃO' },
-    { href: '#faq', label: 'FAQ' }
+    { href: '#faq', label: 'FAQ' },
+    { href: '#localizacao', label: 'LOCALIZAÇÃO' }
   ];
 
   return (

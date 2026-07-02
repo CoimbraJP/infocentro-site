@@ -31,7 +31,8 @@ body {
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   opacity: 0.035;
-  z-index: 9999;
+  /* acima da navbar (z-50) e do botao flutuante (z-50); textura cobre tudo */
+  z-index: 60;
   pointer-events: none;
 }
 
@@ -42,6 +43,22 @@ body {
 
 .text-neon {
   text-shadow: 0 0 10px rgba(229, 255, 0, 0.5);
+}
+
+/* Ancoras nao ficam escondidas atras da navbar fixa */
+section[id] {
+  scroll-margin-top: 4.5rem;
+}
+
+/* Revelacao sutil ao entrar na viewport (ver componente Reveal) */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-visible {
+  opacity: 1;
+  transform: none;
 }
 
 /* Scroll hint bounce */
@@ -134,6 +151,11 @@ body {
   .scroll-bounce,
   .parallax-drop {
     animation: none !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
 

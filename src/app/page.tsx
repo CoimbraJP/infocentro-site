@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import NavBar from '@/components/ui/NavBar';
 import FrameSequence from '@/components/ui/FrameSequence';
 import YouTubeFacade from '@/components/ui/YouTubeFacade';
+import Reveal from '@/components/ui/Reveal';
 import { WHATSAPP_ORCAMENTO } from '@/lib/site';
 import { LucideWrench, LucideShieldCheck, LucideServer, LucideCpu, LucideHeartHandshake, LucideArrowRight, LucideCheckCircle2, LucideMessageCircle, LucideCircuitBoard, LucideMonitorSmartphone, LucideChevronDown } from 'lucide-react';
 
@@ -69,7 +70,15 @@ export default function InfoCentroPage() {
             </div>
           </div>
         </div>
-        
+
+        {/* Dica de que o hero e uma sequencia controlada pelo scroll; some conforme o usuario rola */}
+        <div
+          aria-hidden="true"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 pointer-events-none scroll-bounce"
+          style={{ opacity: 'calc(1 - var(--scroll-progress, 0) * 4)' }}
+        >
+          <LucideChevronDown size={28} className="text-white/70" />
+        </div>
       </FrameSequence>
 
       <section id="sobre" className="py-32 bg-black relative z-10 border-t border-white/5">
@@ -85,7 +94,7 @@ export default function InfoCentroPage() {
               Também montamos PCs sob medida — do uso diário ao alto desempenho gamer.
             </p>
             <ul className="space-y-4">
-              {['Tradição desde 1991', 'Especialistas em notebooks', 'Atendimento direto e confiável', 'Transparencia total no diagnostico'].map((item, i) => (
+              {['Tradição desde 1991', 'Especialistas em notebooks', 'Atendimento direto e confiável', 'Transparência total no diagnóstico'].map((item, i) => (
                 <li key={i} className="flex items-center gap-3 text-white/90">
                   <LucideCheckCircle2 className="text-primary" size={24} />
                   <span>{item}</span>
@@ -126,26 +135,28 @@ export default function InfoCentroPage() {
               { icon: LucideCircuitBoard, title: "Reparo de Placa Mãe", desc: "Identificação de curtos e reparo avançado eletrônico em nível de componente." },
               { icon: LucideMonitorSmartphone, title: "Troca de Tela e Teclado", desc: "Substituição rápida e segura de displays e teclados originais para notebooks." }
             ].map((srv, idx) => (
-              <div key={idx} className="bg-surface p-8 rounded-xl border border-white/5 hover:border-primary/50 transition-colors group">
-                <srv.icon size={40} className="text-primary mb-6 group-hover:scale-110 transition-transform" />
-                <h3 className="text-xl font-bold mb-3 display-font">{srv.title}</h3>
-                <p className="text-white/60 leading-relaxed">{srv.desc}</p>
-              </div>
+              <Reveal key={idx} delay={(idx % 3) * 90}>
+                <div className="h-full bg-surface p-8 rounded-xl border border-white/5 hover:border-primary/50 transition-colors group">
+                  <srv.icon size={40} className="text-primary mb-6 group-hover:scale-110 transition-transform" />
+                  <h3 className="text-xl font-bold mb-3 display-font">{srv.title}</h3>
+                  <p className="text-white/60 leading-relaxed">{srv.desc}</p>
+                </div>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
       <section id="qualidade" className="py-32 bg-black relative z-10 border-t border-white/5">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+        <Reveal className="max-w-4xl mx-auto px-6 text-center">
             <LucideHeartHandshake size={60} className="text-primary mx-auto mb-8" />
             <h2 className="text-3xl md:text-5xl font-bold mb-8 display-font">Sua máquina em boas mãos.</h2>
             <p className="text-xl text-white/70 leading-relaxed mb-12">
-              Nós sabemos que seu computador é sua ferramenta de trabalho ou lazer principal. 
-              Por isso, levamos a segurança e o cuidado muito a sério. Testes de stress após 
+              Nós sabemos que seu computador é sua ferramenta de trabalho ou lazer principal.
+              Por isso, levamos a segurança e o cuidado muito a sério. Testes de stress após
               cada montagem/manutenção garantem que você não terá dores de cabeça.
             </p>
-        </div>
+        </Reveal>
       </section>
 
       <section id="videos" className="py-24 bg-black relative z-10 border-t border-white/5">
@@ -197,8 +208,14 @@ export default function InfoCentroPage() {
                         <p className="font-bold text-white/90">{dep.nome}</p>
                         <span className="text-sm text-white/60">{dep.time}</span>
                       </div>
-                      <div className="absolute top-8 right-8 w-6 h-6 rounded-full bg-white flex items-center justify-center">
-                        <span className="text-blue-600 font-bold text-sm tracking-tighter" style={{fontFamily: 'serif'}}>G</span>
+                      <div aria-hidden="true" className="absolute top-8 right-8 w-6 h-6 rounded-full bg-white flex items-center justify-center">
+                        {/* "G" oficial do Google (avaliacoes vem do Google Meu Negocio) */}
+                        <svg viewBox="0 0 48 48" className="w-3.5 h-3.5">
+                          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                        </svg>
                       </div>
                     </div>
                     <div className="flex text-yellow-500 mb-4 text-sm" role="img" aria-label="5 de 5 estrelas">★★★★★</div>
@@ -225,8 +242,8 @@ export default function InfoCentroPage() {
           <h2 className="text-3xl font-bold mb-12 text-center display-font">Dúvidas Frequentes</h2>
           <div className="space-y-4">
             {[
-              { q: "Meu notebook está muito lento. Vale a pena arrumar?", a: "Na maioria dos casos, sim. Com upgrades simples como SSD e memória, é possível recuperar e ate superar performance de modelos novos." },
-              { q: "Qual o prazo médio para formatar um PC?", a: "Em média, devolvemos a máquina formatada no mesmo dia!!" },
+              { q: "Meu notebook está muito lento. Vale a pena arrumar?", a: "Na maioria dos casos, sim. Com upgrades simples como SSD e memória, é possível recuperar e até superar a performance de modelos novos." },
+              { q: "Qual o prazo médio para formatar um PC?", a: "Em média, devolvemos a máquina formatada no mesmo dia!" },
               { q: "Vocês fazem limpeza interna do notebook?", a: "Sim. Realizamos limpeza completa e troca de pasta térmica, ajudando a reduzir temperatura e melhorar o desempenho." },
               { q: "Meu notebook desligou e não liga mais. Tem conserto?", a: "Sim, muitos casos têm solução. Fazemos diagnóstico para identificar a causa e informar a melhor opção de reparo." },
               { q: "Vocês dão garantia nos serviços?", a: "Sim. Todos os serviços possuem garantia, que varia de acordo com o tipo de manutenção realizada." },
