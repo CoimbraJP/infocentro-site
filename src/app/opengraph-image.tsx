@@ -37,7 +37,7 @@ export default function OpenGraphImage() {
             elevada ao máximo.
           </div>
         </div>
-        <div style={{ color: 'rgba(248,248,248,0.75)', fontSize: 30 }}>
+        <div style={{ color: 'rgba(248,248,248,0.75)', fontSize: 26 }}>
           Manutenção de notebooks e PCs gamer · São José dos Campos · desde 1991
         </div>
       </div>
