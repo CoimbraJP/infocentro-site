@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useScrollFrame } from '@/hooks/useScrollFrame';
 
 interface FrameSequenceProps {
@@ -42,7 +42,14 @@ export default function FrameSequence({
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const isReadyRef = useRef(false);
 
+  // So carrega apos o primeiro commit no cliente: os props dependentes de
+  // viewport (step, scale) chegam com valor de desktop no primeiro render,
+  // e comecar o download antes disso desperdicava frames no mobile.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const currentFrame = useScrollFrame(containerRef, totalFrames, mode);
+  const currentFrameRef = useRef(currentFrame);
 
   const getFrameUrl = (index: number) => {
     const padded = String(index + 1).padStart(zeroPad, '0');
@@ -50,11 +57,13 @@ export default function FrameSequence({
   };
 
   useEffect(() => {
+    if (!mounted) return;
     const images: HTMLImageElement[] = Array(totalFrames).fill(null);
-    
+
     // Only initialize and load images that match the step
     for (let i = 0; i < totalFrames; i += step) {
       images[i] = new Image();
+      images[i].decoding = 'async';
     }
     imagesRef.current = images;
 
@@ -94,7 +103,7 @@ export default function FrameSequence({
     } else {
       setTimeout(loadRest, 100);
     }
-  }, [totalFrames, framesPath, step]);
+  }, [totalFrames, framesPath, step, mounted]);
 
   const syncCanvasSize = () => {
     const canvas = canvasRef.current;
@@ -183,6 +192,7 @@ export default function FrameSequence({
   };
 
   useEffect(() => {
+    currentFrameRef.current = currentFrame;
     if (!isReadyRef.current) return;
     requestAnimationFrame(() => {
       drawFrame(currentFrame);
@@ -192,14 +202,21 @@ export default function FrameSequence({
     });
   }, [currentFrame, totalFrames]);
 
+  // Refs mantem o listener de resize estavel (antes era removido e recriado
+  // a cada frame do scroll) sem capturar drawFrame/currentFrame obsoletos.
+  const drawFrameRef = useRef(drawFrame);
+  useEffect(() => {
+    drawFrameRef.current = drawFrame;
+  });
+
   useEffect(() => {
     const onResize = () => {
       syncCanvasSize();
-      drawFrame(currentFrame);
+      drawFrameRef.current(currentFrameRef.current);
     };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
-  }, [currentFrame]);
+  }, []);
 
   if (mode === 'inline') {
     return (
