@@ -164,3 +164,27 @@ section[id] {
 ::-webkit-scrollbar-track { background: var(--color-black); }
 ::-webkit-scrollbar-thumb { background: rgba(229, 255, 0, 0.3); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
+
+/* Impressao das etiquetas (painel /jp): pagina A4 e sem o grain de fundo,
+   que nao faz sentido em papel e so gastaria tinta. O resto (esconder
+   sidebar/header/botoes) e feito com a variante print: do Tailwind direto
+   nos componentes. */
+@media print {
+  .grain::after {
+    display: none;
+  }
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+  /* Sem isso, o navegador some com toda cor de fundo/gradiente na hora de
+     imprimir (comportamento padrao do Chrome/Edge/Firefox pra economizar
+     tinta) -- e como os modelos de etiqueta usam cor de fundo pra se
+     identificar, o PDF saia parecido mas "sem graca", nunca o modelo exato
+     escolhido no showroom. Isso forca a impressao a respeitar as cores. */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+}
