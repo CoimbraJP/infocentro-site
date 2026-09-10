@@ -18,6 +18,7 @@ import {
   LucideSmartphone,
   LucideFileDown,
   LucideEye,
+  LucideDownload,
 } from 'lucide-react';
 import Card from '@/components/jp/ui/Card';
 import Button from '@/components/jp/ui/Button';
@@ -91,6 +92,22 @@ export default function EtiquetasSalvasApp() {
   const handleGeneratePdf = () => {
     setPreviewMode(true);
     window.setTimeout(() => window.print(), 100);
+  };
+
+  // Backup em JSON de tudo que está salvo NESTE navegador — é a única forma
+  // de tirar os dados daqui pra fora, já que ficam só no localStorage (sem
+  // servidor). Serve tanto pra guardar uma cópia de segurança quanto pra
+  // importar depois em outro sistema (ex: o PDV).
+  const handleExportBackup = () => {
+    const blob = new Blob([JSON.stringify(saved, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `etiquetas-salvas-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   // PointerSensor cobre mouse/trackpad; TouchSensor com um pequeno delay
@@ -180,13 +197,18 @@ export default function EtiquetasSalvasApp() {
             >
               {allSelected ? 'Desmarcar todas' : 'Selecionar todas'}
             </button>
-            <Button
-              onClick={handleGeneratePdf}
-              disabled={selectedNotebooks.length === 0}
-              className="flex items-center gap-2"
-            >
-              <LucideFileDown size={18} /> Gerar PDF ({selectedNotebooks.length})
-            </Button>
+            <div className="flex flex-wrap items-center gap-2">
+              <Button variant="outline" onClick={handleExportBackup} className="flex items-center gap-2">
+                <LucideDownload size={18} /> Baixar backup (JSON)
+              </Button>
+              <Button
+                onClick={handleGeneratePdf}
+                disabled={selectedNotebooks.length === 0}
+                className="flex items-center gap-2"
+              >
+                <LucideFileDown size={18} /> Gerar PDF ({selectedNotebooks.length})
+              </Button>
+            </div>
           </div>
 
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
