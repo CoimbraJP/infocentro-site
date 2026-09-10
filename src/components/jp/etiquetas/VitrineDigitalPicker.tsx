@@ -1,6 +1,8 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { toPng } from 'html-to-image';
+import JSZip from 'jszip';
 import {
   LucideArrowLeft,
   LucideImagePlus,
@@ -9,20 +11,63 @@ import {
   LucideLibrary,
   LucideSmartphone,
   LucideLoader2,
+  LucideDownload,
+  LucideDownloadCloud,
 } from 'lucide-react';
 import Card from '@/components/jp/ui/Card';
 import Button from '@/components/jp/ui/Button';
 import { NotebookLabel, loadSavedLabels, formatCurrency, parseCurrencyInput } from '@/lib/jp/etiquetas';
 import { getFotoModelo, setFotoModelo, compressImageFile } from '@/lib/jp/fotos-modelo';
-import { buildVitrineDigitalUrl } from '@/lib/jp/vitrine-digital';
+import { buildVitrineDigitalUrl, type VitrineDigitalPayload } from '@/lib/jp/vitrine-digital';
+import VitrineDigitalCard from './VitrineDigitalCard';
 
-// Gera o link auto-contido da Vitrine Digital (etiqueta em formato de tela
-// de celular, com foto) a partir de uma etiqueta já salva na biblioteca. A
-// foto fica anexada por modelo (getFotoModelo/setFotoModelo) — anexa uma vez
-// e qualquer notebook com esse mesmo nome já aproveita. O link em si carrega
-// todos os dados (inclusive a foto) dentro dele, então funciona em qualquer
-// aparelho sem precisar sincronizar nada — só abrir o link no tablet/celular
-// de exibição (colar direto, ou mandar por WhatsApp/e-mail pra si mesmo).
+// Remove acentos (marcas diacríticas combinantes, U+0300-U+036F) depois de
+// decompor o texto via NFD, pra virar um nome de arquivo seguro.
+const DIACRITICS_REGEX = /[̀-ͯ]/g;
+
+function slugify(text: string): string {
+  return (
+    text
+      .normalize('NFD')
+      .replace(DIACRITICS_REGEX, '')
+      .replace(/[^a-zA-Z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .toLowerCase() || 'notebook'
+  );
+}
+
+function toPayload(notebook: NotebookLabel, foto: string | null): VitrineDigitalPayload {
+  return {
+    marcaModelo: notebook.marcaModelo,
+    processador: notebook.processador,
+    memoriaRam: notebook.memoriaRam,
+    armazenamento: notebook.armazenamento,
+    sistemaOperacional: notebook.sistemaOperacional,
+    bateria: notebook.bateria,
+    placaVideo: notebook.placaVideo,
+    valorAVista: notebook.valorAVista,
+    foto,
+  };
+}
+
+function triggerDownload(href: string, filename: string) {
+  const link = document.createElement('a');
+  link.href = href;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// Gera a Vitrine Digital (etiqueta em formato de tela de celular, com foto)
+// a partir de uma etiqueta já salva. A foto fica anexada por modelo
+// (getFotoModelo/setFotoModelo) — anexa uma vez e qualquer notebook com esse
+// mesmo nome já aproveita.
+//
+// A entrega principal é a IMAGEM (PNG) pra baixar e mandar direto pro
+// cliente por WhatsApp — "Gerar Todos" baixa todas de uma vez, já
+// compactadas num .zip. O link de exibição continua existindo à parte, pra
+// quem quiser deixar aberto ao vivo num tablet fixado na loja.
 export default function VitrineDigitalPicker() {
   const [saved, setSaved] = useState<NotebookLabel[]>([]);
   const [hydrated, setHydrated] = useState(false);
@@ -30,7 +75,11 @@ export default function VitrineDigitalPicker() {
   const [uploadingId, setUploadingId] = useState<string | null>(null);
   const [links, setLinks] = useState<Record<string, string>>({});
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const [generatingAll, setGeneratingAll] = useState(false);
   const [error, setError] = useState('');
+
+  const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   useEffect(() => {
     const notebooks = loadSavedLabels();
@@ -52,8 +101,6 @@ export default function VitrineDigitalPicker() {
       const compressed = await compressImageFile(file);
       setFotoModelo(notebook.marcaModelo, compressed);
       setPhotos((current) => ({ ...current, [notebook.id]: compressed }));
-      // Se já tinha um link gerado antes de trocar a foto, ele fica
-      // desatualizado — força gerar de novo pra não compartilhar foto velha.
       setLinks((current) => {
         const next = { ...current };
         delete next[notebook.id];
@@ -67,17 +114,7 @@ export default function VitrineDigitalPicker() {
   };
 
   const handleGenerateLink = (notebook: NotebookLabel) => {
-    const url = buildVitrineDigitalUrl({
-      marcaModelo: notebook.marcaModelo,
-      processador: notebook.processador,
-      memoriaRam: notebook.memoriaRam,
-      armazenamento: notebook.armazenamento,
-      sistemaOperacional: notebook.sistemaOperacional,
-      bateria: notebook.bateria,
-      placaVideo: notebook.placaVideo,
-      valorAVista: notebook.valorAVista,
-      foto: photos[notebook.id] ?? null,
-    });
+    const url = buildVitrineDigitalUrl(toPayload(notebook, photos[notebook.id] ?? null));
     setLinks((current) => ({ ...current, [notebook.id]: url }));
   };
 
@@ -93,6 +130,45 @@ export default function VitrineDigitalPicker() {
     }
   };
 
+  const handleDownloadOne = async (notebook: NotebookLabel) => {
+    const node = cardRefs.current.get(notebook.id);
+    if (!node) return;
+    setError('');
+    setDownloadingId(notebook.id);
+    try {
+      const dataUrl = await toPng(node, { pixelRatio: 2 });
+      triggerDownload(dataUrl, `etiqueta-${slugify(notebook.marcaModelo)}.png`);
+    } catch {
+      setError('Não foi possível gerar a imagem dessa etiqueta.');
+    } finally {
+      setDownloadingId(null);
+    }
+  };
+
+  const withPhoto = saved.filter((nb) => photos[nb.id]);
+
+  const handleGenerateAll = async () => {
+    if (withPhoto.length === 0) return;
+    setError('');
+    setGeneratingAll(true);
+    try {
+      const zip = new JSZip();
+      for (const notebook of withPhoto) {
+        const node = cardRefs.current.get(notebook.id);
+        if (!node) continue;
+        const dataUrl = await toPng(node, { pixelRatio: 2 });
+        const base64 = dataUrl.split(',')[1];
+        zip.file(`etiqueta-${slugify(notebook.marcaModelo)}.png`, base64, { base64: true });
+      }
+      const blob = await zip.generateAsync({ type: 'blob' });
+      triggerDownload(URL.createObjectURL(blob), 'etiquetas-vitrine-digital.zip');
+    } catch {
+      setError('Não foi possível gerar o pacote de imagens. Tente novamente.');
+    } finally {
+      setGeneratingAll(false);
+    }
+  };
+
   return (
     <div>
       <Link
@@ -102,14 +178,21 @@ export default function VitrineDigitalPicker() {
         <LucideArrowLeft size={16} /> Voltar para o gerador
       </Link>
 
-      <div className="mb-8">
-        <p className="text-sm uppercase tracking-widest text-primary">Etiquetas de Vitrine</p>
-        <h1 className="display-font mt-1 text-3xl font-bold text-white md:text-4xl">Vitrine Digital</h1>
-        <p className="mt-2 max-w-2xl text-white/60">
-          Etiqueta em formato de tela de celular, com foto do notebook, pra exibir num tablet ou celular fixado do
-          lado do produto na loja. Anexe uma foto (já com fundo removido) por modelo e gere um link — ele carrega
-          todos os dados dentro dele, então abre certinho em qualquer aparelho, sem precisar sincronizar nada.
-        </p>
+      <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-widest text-primary">Etiquetas de Vitrine</p>
+          <h1 className="display-font mt-1 text-3xl font-bold text-white md:text-4xl">Vitrine Digital</h1>
+          <p className="mt-2 max-w-2xl text-white/60">
+            Etiqueta em formato de tela de celular, com foto do notebook. Anexe uma foto (já com fundo removido) por
+            modelo e baixe a imagem pronta — pra mandar pro cliente por WhatsApp ou deixar salva num tablet.
+          </p>
+        </div>
+        {withPhoto.length > 0 && (
+          <Button onClick={handleGenerateAll} disabled={generatingAll} className="flex shrink-0 items-center gap-2">
+            {generatingAll ? <LucideLoader2 size={18} className="animate-spin" /> : <LucideDownloadCloud size={18} />}
+            Gerar Todos ({withPhoto.length})
+          </Button>
+        )}
       </div>
 
       {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
@@ -132,6 +215,7 @@ export default function VitrineDigitalPicker() {
             const foto = photos[nb.id];
             const link = links[nb.id];
             const isUploading = uploadingId === nb.id;
+            const isDownloading = downloadingId === nb.id;
             return (
               <Card key={nb.id} className="flex flex-col gap-4 p-5">
                 <div className="flex items-center gap-4">
@@ -170,12 +254,23 @@ export default function VitrineDigitalPicker() {
                     />
                   </label>
 
-                  <Button
-                    variant="outline"
-                    onClick={() => handleGenerateLink(nb)}
-                    className="flex items-center gap-2"
-                  >
-                    <LucideSmartphone size={16} /> Gerar link de exibição
+                  {foto && (
+                    <Button
+                      onClick={() => handleDownloadOne(nb)}
+                      disabled={isDownloading}
+                      className="flex items-center gap-2"
+                    >
+                      {isDownloading ? (
+                        <LucideLoader2 size={16} className="animate-spin" />
+                      ) : (
+                        <LucideDownload size={16} />
+                      )}
+                      Baixar imagem
+                    </Button>
+                  )}
+
+                  <Button variant="outline" onClick={() => handleGenerateLink(nb)} className="flex items-center gap-2">
+                    <LucideSmartphone size={16} /> Link de exibição
                   </Button>
                 </div>
 
@@ -208,6 +303,21 @@ export default function VitrineDigitalPicker() {
           })}
         </div>
       )}
+
+      {/* Fora da tela de propósito — existe só pra servir de fonte pro html-to-image gerar o PNG. */}
+      <div aria-hidden style={{ position: 'fixed', top: 0, left: -99999, pointerEvents: 'none' }}>
+        {withPhoto.map((nb) => (
+          <div
+            key={nb.id}
+            ref={(el) => {
+              if (el) cardRefs.current.set(nb.id, el);
+              else cardRefs.current.delete(nb.id);
+            }}
+          >
+            <VitrineDigitalCard payload={toPayload(nb, photos[nb.id])} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
