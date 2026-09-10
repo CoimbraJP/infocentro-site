@@ -119,3 +119,48 @@ export function saveStoredNotebooks(notebooks: NotebookLabel[]): void {
   if (typeof window === 'undefined') return;
   window.localStorage.setItem(JP_ETIQUETAS_STORAGE_KEY, JSON.stringify(notebooks));
 }
+
+// Biblioteca de etiquetas salvas: separada do formulário de trabalho acima.
+// O formulário (JP_ETIQUETAS_STORAGE_KEY) é o rascunho atual — some sozinho
+// em 30 dias e é substituído toda vez que o usuário cria um lote novo ou
+// carrega os exemplos. A biblioteca é o oposto: o usuário decide o que
+// guarda ("Salvar"), fica lá indefinidamente (sem expiração automática) e só
+// some se o próprio usuário apagar na página /jp/etiquetas/salvas.
+export const JP_ETIQUETAS_BIBLIOTECA_KEY = 'jp_etiquetas_biblioteca_v1';
+
+export function loadSavedLabels(): NotebookLabel[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = window.localStorage.getItem(JP_ETIQUETAS_BIBLIOTECA_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as NotebookLabel[];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveSavedLabels(notebooks: NotebookLabel[]): void {
+  if (typeof window === 'undefined') return;
+  window.localStorage.setItem(JP_ETIQUETAS_BIBLIOTECA_KEY, JSON.stringify(notebooks));
+}
+
+/**
+ * Copia os notebooks informados pra biblioteca permanente (cada um com um id
+ * novo e createdAt do momento do salvamento, pra não colidir com o item de
+ * origem no formulário de trabalho nem herdar a contagem de expiração dele).
+ * Retorna a lista atualizada da biblioteca já persistida.
+ */
+export function addNotebooksToLibrary(notebooks: NotebookLabel[]): NotebookLabel[] {
+  const now = Date.now();
+  const copies = notebooks.map((nb) => ({ ...nb, id: generateId(), createdAt: now }));
+  const updated = [...loadSavedLabels(), ...copies];
+  saveSavedLabels(updated);
+  return updated;
+}
+
+export function removeSavedLabel(id: string): NotebookLabel[] {
+  const updated = loadSavedLabels().filter((nb) => nb.id !== id);
+  saveSavedLabels(updated);
+  return updated;
+}

@@ -9,12 +9,21 @@ import {
   LucideArrowLeft,
   LucideLayoutTemplate,
   LucideListPlus,
+  LucideBookmarkPlus,
+  LucideLibrary,
+  LucideSmartphone,
 } from 'lucide-react';
 import Button from '@/components/jp/ui/Button';
 import { JP_INPUT_CLASS } from '@/lib/jp/ui';
 import NotebookCard from './NotebookCard';
 import EtiquetaPreviewCard from './EtiquetaPreviewCard';
-import { NotebookLabel, createEmptyNotebook, loadStoredNotebooks, saveStoredNotebooks } from '@/lib/jp/etiquetas';
+import {
+  NotebookLabel,
+  createEmptyNotebook,
+  loadStoredNotebooks,
+  saveStoredNotebooks,
+  addNotebooksToLibrary,
+} from '@/lib/jp/etiquetas';
 import { createPresetNotebooks } from '@/lib/jp/preset-notebooks';
 import { getSelectedTemplateId } from '@/lib/jp/label-templates';
 import {
@@ -54,6 +63,8 @@ export default function EtiquetasVitrineApp() {
   const [hydrated, setHydrated] = useState(false);
   const [templateId, setTemplateId] = useState<string | null>(null);
   const [perPage, setPerPage] = useState<LabelsPerPage>(6);
+  const [justSavedIds, setJustSavedIds] = useState<Set<string>>(new Set());
+  const [savedAllFeedback, setSavedAllFeedback] = useState(false);
 
   // Carrega do localStorage na montagem; loadStoredNotebooks já descarta
   // qualquer etiqueta com mais de 30 dias antes de devolver a lista.
@@ -132,6 +143,28 @@ export default function EtiquetasVitrineApp() {
     setPreviewMode(false);
   };
 
+  // Salvar não move nem substitui nada no formulário de trabalho — só copia
+  // o(s) notebook(s) pra biblioteca permanente (/jp/etiquetas/salvas), que
+  // não expira em 30 dias e só o usuário apaga manualmente.
+  const flashSaved = (ids: string[]) => {
+    setJustSavedIds(new Set(ids));
+    window.setTimeout(() => setJustSavedIds(new Set()), 2000);
+  };
+
+  const handleSaveOne = (id: string) => {
+    const notebook = notebooks.find((nb) => nb.id === id);
+    if (!notebook) return;
+    addNotebooksToLibrary([notebook]);
+    flashSaved([id]);
+  };
+
+  const handleSaveAll = () => {
+    addNotebooksToLibrary(notebooks);
+    flashSaved(notebooks.map((nb) => nb.id));
+    setSavedAllFeedback(true);
+    window.setTimeout(() => setSavedAllFeedback(false), 2000);
+  };
+
   const handleGeneratePdf = () => {
     setPreviewMode(true);
     // Pequeno atraso pra garantir que a grade de prévia já renderizou antes
@@ -158,8 +191,9 @@ export default function EtiquetasVitrineApp() {
           <p className="text-sm uppercase tracking-widest text-primary">Etiquetas de Vitrine</p>
           <h1 className="display-font mt-1 text-3xl font-bold text-white md:text-4xl">Gerador de Etiquetas</h1>
           <p className="mt-2 max-w-xl text-white/60">
-            Crie etiquetas de preço para os notebooks expostos na vitrine. As etiquetas ficam guardadas por 30 dias
-            e somem automaticamente depois disso.
+            Crie etiquetas de preço para os notebooks expostos na vitrine. Este formulário é um rascunho de trabalho
+            e some sozinho em 30 dias — clique em <LucideBookmarkPlus size={13} className="inline -mt-0.5" /> ou em
+            &quot;Salvar Todas&quot; pra guardar de vez na biblioteca.
           </p>
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5">
             <Link
@@ -167,6 +201,18 @@ export default function EtiquetasVitrineApp() {
               className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-white"
             >
               <LucideLayoutTemplate size={15} /> Ver modelos de etiqueta
+            </Link>
+            <Link
+              href="/jp/etiquetas/salvas"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-white"
+            >
+              <LucideLibrary size={15} /> Etiquetas salvas
+            </Link>
+            <Link
+              href="/jp/etiquetas/vitrine-digital"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-white"
+            >
+              <LucideSmartphone size={15} /> Vitrine digital
             </Link>
             {hydrated && (
               <p className="text-xs text-white/40">
@@ -226,7 +272,7 @@ export default function EtiquetasVitrineApp() {
           >
             <LucideArrowLeft size={16} /> Voltar para edição
           </button>
-          <div className={`grid grid-cols-1 gap-6 ${gridColsClasses} print:gap-6`}>
+          <div className={`grid grid-cols-1 gap-6 ${gridColsClasses} print:gap-4`}>
             {notebooks.map((nb) => (
               <EtiquetaPreviewCard key={nb.id} notebook={nb} templateId={templateId} printCell={printCell} />
             ))}
@@ -241,6 +287,8 @@ export default function EtiquetasVitrineApp() {
               notebook={nb}
               onChange={(patch) => handleUpdate(nb.id, patch)}
               onRemove={notebooks.length > 1 ? () => handleRemove(nb.id) : undefined}
+              onSave={() => handleSaveOne(nb.id)}
+              justSaved={justSavedIds.has(nb.id)}
             />
           ))}
         </div>
@@ -253,6 +301,15 @@ export default function EtiquetasVitrineApp() {
         <Button onClick={handleGeneratePdf} className="flex items-center justify-center gap-2">
           <LucideFileDown size={18} /> Gerar PDF
         </Button>
+        <Button variant="outline" onClick={handleSaveAll} className="flex items-center justify-center gap-2">
+          <LucideBookmarkPlus size={18} /> {savedAllFeedback ? 'Salvo!' : 'Salvar Todas'}
+        </Button>
+        <Link
+          href="/jp/etiquetas/salvas"
+          className="flex items-center justify-center gap-2 rounded px-5 py-3 text-sm font-semibold text-white/70 transition-colors hover:bg-white/5 hover:text-white"
+        >
+          <LucideLibrary size={18} /> Etiquetas Salvas
+        </Link>
         <Link
           href="/jp/etiquetas/modelos"
           className="flex items-center justify-center gap-2 rounded px-5 py-3 text-sm font-semibold text-white/70 transition-colors hover:bg-white/5 hover:text-white"

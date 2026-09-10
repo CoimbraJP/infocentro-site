@@ -1,13 +1,17 @@
 import { createEmptyNotebook, type NotebookLabel } from './etiquetas';
 
 // Lista de notebooks que o usuário passou pra já vir preenchidos no gerador
-// (/jp/etiquetas), pra ele só revisar e completar o que faltar. Tela, placa
-// de vídeo e valor à vista não foram informados pra nenhum modelo, então
-// ficam no padrão/em branco — e o campo de bateria só aceita "Boa" ou
-// "Ruim", então descrições como "nova", "muito excelente" ou "ok" foram
-// todas mapeadas pra "Boa" (só "ruim" virou "Ruim").
+// (/jp/etiquetas), pra ele só revisar e completar o que faltar. Tela e placa
+// de vídeo não foram informadas pra nenhum modelo, então ficam no
+// padrão/em branco — e o campo de bateria só aceita "Boa" ou "Ruim", então
+// descrições como "nova", "muito excelente" ou "ok" foram todas mapeadas pra
+// "Boa" (só "ruim" virou "Ruim"). valorAVista é o preço à vista digitado —
+// o parcelado (12x) é sempre calculado a partir dele, nunca guardado direto.
 type PresetNotebook = Partial<
-  Pick<NotebookLabel, 'marcaModelo' | 'processador' | 'memoriaRam' | 'armazenamento' | 'sistemaOperacional' | 'bateria'>
+  Pick<
+    NotebookLabel,
+    'marcaModelo' | 'processador' | 'memoriaRam' | 'armazenamento' | 'sistemaOperacional' | 'bateria' | 'valorAVista'
+  >
 >;
 
 const PRESET_NOTEBOOKS: PresetNotebook[] = [
@@ -18,6 +22,7 @@ const PRESET_NOTEBOOKS: PresetNotebook[] = [
     armazenamento: '500GB HD',
     sistemaOperacional: 'Windows 11',
     bateria: 'Ruim',
+    valorAVista: '1899,00',
   },
   {
     marcaModelo: 'Dell Vostro 14 3468',
@@ -26,6 +31,7 @@ const PRESET_NOTEBOOKS: PresetNotebook[] = [
     armazenamento: '500GB HD',
     sistemaOperacional: 'Windows 10',
     bateria: 'Ruim',
+    valorAVista: '1499,00',
   },
   {
     marcaModelo: 'Lenovo ThinkPad E431',
@@ -34,6 +40,7 @@ const PRESET_NOTEBOOKS: PresetNotebook[] = [
     armazenamento: '320GB HD',
     sistemaOperacional: 'Windows 10',
     bateria: 'Boa',
+    valorAVista: '1499,00',
   },
   {
     marcaModelo: 'Lenovo IdeaPad S145',
@@ -42,6 +49,7 @@ const PRESET_NOTEBOOKS: PresetNotebook[] = [
     armazenamento: '240GB SSD',
     sistemaOperacional: 'Windows 10',
     bateria: 'Boa',
+    valorAVista: '2499,00',
   },
   {
     marcaModelo: 'Compaq Presario CQ-17',
@@ -50,6 +58,7 @@ const PRESET_NOTEBOOKS: PresetNotebook[] = [
     armazenamento: '32GB SSD + 500GB HD',
     sistemaOperacional: 'Windows 10',
     bateria: 'Boa',
+    valorAVista: '1799,00',
   },
   {
     marcaModelo: 'Samsung 350X',
@@ -58,6 +67,7 @@ const PRESET_NOTEBOOKS: PresetNotebook[] = [
     armazenamento: '240GB NVMe SSD',
     sistemaOperacional: 'Windows 10',
     bateria: 'Boa',
+    valorAVista: '2499,00',
   },
   {
     marcaModelo: 'Acer Aspire A315-53',
@@ -66,6 +76,7 @@ const PRESET_NOTEBOOKS: PresetNotebook[] = [
     armazenamento: '120GB SSD',
     sistemaOperacional: 'Windows 10',
     bateria: 'Boa',
+    valorAVista: '1899,00',
   },
   {
     marcaModelo: 'Dell Vostro 3300',
@@ -74,6 +85,7 @@ const PRESET_NOTEBOOKS: PresetNotebook[] = [
     armazenamento: '128GB NVMe SSD',
     sistemaOperacional: 'Windows 10',
     bateria: 'Boa',
+    valorAVista: '2399,00',
   },
   {
     marcaModelo: 'Asus K45A',
@@ -82,6 +94,7 @@ const PRESET_NOTEBOOKS: PresetNotebook[] = [
     armazenamento: '240GB SSD',
     sistemaOperacional: 'Windows 10',
     bateria: 'Boa',
+    valorAVista: '2399,00',
   },
   {
     marcaModelo: 'Lenovo L440',
@@ -90,6 +103,7 @@ const PRESET_NOTEBOOKS: PresetNotebook[] = [
     armazenamento: '120GB SSD',
     sistemaOperacional: 'Windows 11',
     bateria: 'Boa',
+    valorAVista: '2999,00',
   },
   {
     marcaModelo: 'Samsung NP550X',
@@ -98,6 +112,7 @@ const PRESET_NOTEBOOKS: PresetNotebook[] = [
     armazenamento: '500GB HD',
     sistemaOperacional: 'Windows 10',
     bateria: 'Boa',
+    valorAVista: '2399,00',
   },
   {
     marcaModelo: 'Positivo Vision C15',
@@ -106,6 +121,34 @@ const PRESET_NOTEBOOKS: PresetNotebook[] = [
     armazenamento: '120GB NVMe SSD',
     sistemaOperacional: 'Windows 10',
     bateria: 'Boa',
+    valorAVista: '1699,00',
+  },
+  {
+    marcaModelo: 'Asus X5DIJ',
+    processador: 'Intel Dual Core',
+    memoriaRam: '4GB RAM',
+    armazenamento: '320GB HD',
+    sistemaOperacional: 'Windows 10',
+    bateria: 'Ruim',
+    valorAVista: '899,00',
+  },
+  {
+    marcaModelo: 'Lenovo LNV L4070',
+    processador: 'Intel Core i3',
+    memoriaRam: '4GB RAM',
+    armazenamento: '320GB HD',
+    sistemaOperacional: 'Windows 10',
+    bateria: 'Ruim',
+    valorAVista: '899,00',
+  },
+  {
+    marcaModelo: 'Asus X552E',
+    processador: 'AMD C',
+    memoriaRam: '4GB RAM',
+    armazenamento: '500GB HD',
+    sistemaOperacional: 'Windows 10',
+    bateria: 'Ruim',
+    valorAVista: '999,00',
   },
 ];
 

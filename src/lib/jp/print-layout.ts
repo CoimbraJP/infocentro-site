@@ -4,10 +4,11 @@
 // de depender do usuário mexer no driver da impressora — frágil e
 // inconsistente entre impressoras/navegadores — a gente calcula o tamanho
 // exato de cada "slot" da grade em pixels (a 96dpi, que é o padrão do CSS)
-// a partir da área útil real do A4 (210x297mm menos as margens de 12mm do
-// @page em globals.css), e o PrintFitStage encolhe/aumenta cada etiqueta pra
-// caber perfeitamente nesse slot — sem depender de configuração alguma na
-// hora de imprimir.
+// a partir da área útil real do A4 (210x297mm menos as margens de 6mm do
+// @page em globals.css — bem enxutas, só o mínimo que a maioria das
+// impressoras precisa, pra sobrar o máximo de espaço pras etiquetas), e o
+// PrintFitStage encolhe/aumenta cada etiqueta pra caber perfeitamente nesse
+// slot — sem depender de configuração alguma na hora de imprimir.
 
 export type LabelsPerPage = 6 | 9;
 
@@ -25,12 +26,12 @@ export function setLabelsPerPage(value: LabelsPerPage): void {
 }
 
 // 96 CSS px por polegada (padrão da web), convertendo a área útil do A4
-// (297x210mm - 2x12mm de margem = 273x186mm) pra pixels.
+// (210x297mm - 2x6mm de margem = 198x285mm) pra pixels.
 const MM_TO_PX = 96 / 25.4;
-const PAGE_CONTENT_WIDTH_PX = 186 * MM_TO_PX; // ~703px
-const PAGE_CONTENT_HEIGHT_PX = 273 * MM_TO_PX; // ~1032px
-const GRID_GAP_PX = 24; // bate com o gap-6 usado na grade de impressão
-const SAFETY_MARGIN = 0.97; // folga de 3% pra nunca estourar a página por arredondamento
+const PAGE_CONTENT_WIDTH_PX = 198 * MM_TO_PX; // ~748px
+const PAGE_CONTENT_HEIGHT_PX = 285 * MM_TO_PX; // ~1077px
+const GRID_GAP_PX = 16; // bate com o gap-4 usado na grade de impressão
+const SAFETY_MARGIN = 0.985; // folga bem pequena (1.5%), só pra nunca estourar a página por arredondamento
 
 const PRINT_LAYOUTS: Record<LabelsPerPage, { cols: number; rows: number; fontBoost: number }> = {
   // 2 colunas x 3 linhas — o que o usuário conseguia manualmente com 96% de zoom.

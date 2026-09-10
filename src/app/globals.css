@@ -175,7 +175,7 @@ section[id] {
   }
   @page {
     size: A4;
-    margin: 12mm;
+    margin: 6mm;
   }
   /* Sem isso, o navegador some com toda cor de fundo/gradiente na hora de
      imprimir (comportamento padrao do Chrome/Edge/Firefox pra economizar

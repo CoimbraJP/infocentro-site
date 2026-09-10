@@ -47,7 +47,7 @@ export function TemplateUsuarioClassico({ data }: LabelTemplateProps) {
     [LucideMonitor, 'Sistema', data.sistemaOperacional],
   ];
   return (
-    <div className="flex aspect-square w-[340px] flex-col justify-between rounded-[28px] border border-black/10 bg-white p-6 text-black shadow-md">
+    <div className="flex aspect-square w-[340px] flex-col justify-between border border-black/10 bg-white p-6 text-black shadow-md">
       <div>
         <div className="flex items-center gap-3">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-800">
@@ -118,7 +118,7 @@ export function TemplateUsuarioEscuro({ data }: LabelTemplateProps) {
     [LucideMonitor, 'Sistema', data.sistemaOperacional],
   ];
   return (
-    <div className="flex aspect-square w-[340px] flex-col justify-between rounded-[28px] border border-white/10 bg-[#0e0e12] p-6 text-white shadow-lg">
+    <div className="flex aspect-square w-[340px] flex-col justify-between border border-white/10 bg-[#0e0e12] p-6 text-white shadow-lg">
       <div>
         <div className="flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -188,7 +188,7 @@ export function TemplateUsuarioContorno({ data }: LabelTemplateProps) {
   ];
   if (data.placaVideo) rows.push(['Placa de Vídeo', data.placaVideo]);
   return (
-    <div className="flex aspect-square w-[340px] flex-col overflow-hidden rounded-[28px] border border-black/10 bg-white text-black shadow-md">
+    <div className="flex aspect-square w-[340px] flex-col overflow-hidden border border-black/10 bg-white text-black shadow-md">
       <div className="h-2 w-full bg-primary" />
       <div className="flex flex-1 flex-col justify-between p-6">
         <div>
@@ -244,7 +244,7 @@ export function TemplateUsuarioBloco({ data }: LabelTemplateProps) {
     [LucideMonitor, data.sistemaOperacional],
   ];
   return (
-    <div className="flex aspect-square w-[340px] flex-col overflow-hidden rounded-[28px] border border-black/10 bg-white text-black shadow-md">
+    <div className="flex aspect-square w-[340px] flex-col overflow-hidden border border-black/10 bg-white text-black shadow-md">
       <div className="flex items-center gap-3 bg-slate-800 px-6 py-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={LOGO_SRC} alt="" className="h-8 w-8 shrink-0 object-contain" />
@@ -299,7 +299,7 @@ export function TemplateUsuarioMinimal({ data }: LabelTemplateProps) {
     Boolean
   );
   return (
-    <div className="flex aspect-square w-[340px] flex-col justify-between rounded-[28px] border border-black/10 bg-white p-7 text-black shadow-sm">
+    <div className="flex aspect-square w-[340px] flex-col justify-between border border-black/10 bg-white p-7 text-black shadow-sm">
       <div>
         <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-800">
           {/* eslint-disable-next-line @next/next/no-img-element */}

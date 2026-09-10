@@ -1,4 +1,4 @@
-import { LucideTrash2 } from 'lucide-react';
+import { LucideTrash2, LucideBookmarkPlus, LucideBookmarkCheck } from 'lucide-react';
 import Card from '@/components/jp/ui/Card';
 import { JP_INPUT_CLASS } from '@/lib/jp/ui';
 import {
@@ -18,6 +18,10 @@ interface NotebookCardProps {
   onChange: (patch: Partial<NotebookLabel>) => void;
   /** Ausente quando é o último card restante — sempre sobra pelo menos um. */
   onRemove?: () => void;
+  /** Copia este notebook pra biblioteca permanente (/jp/etiquetas/salvas). */
+  onSave?: () => void;
+  /** true por alguns segundos logo depois de salvar, só pra dar feedback visual. */
+  justSaved?: boolean;
 }
 
 const inputClass = `${JP_INPUT_CLASS} w-full px-3 py-2.5`;
@@ -26,7 +30,7 @@ const labelClass = 'mb-1.5 block text-xs font-medium uppercase tracking-wide tex
 // Formulário de um notebook. Cada campo é controlado pelo estado do
 // EtiquetasVitrineApp (via onChange) — este componente não guarda estado
 // próprio, o que mantém a persistência/expiração centralizada num só lugar.
-export default function NotebookCard({ index, notebook, onChange, onRemove }: NotebookCardProps) {
+export default function NotebookCard({ index, notebook, onChange, onRemove, onSave, justSaved }: NotebookCardProps) {
   const valor = parseCurrencyInput(notebook.valorAVista);
   const parcela = calculateInstallmentValue(valor);
   const diasRestantes = getDaysUntilExpiry(notebook.createdAt);
@@ -39,6 +43,18 @@ export default function NotebookCard({ index, notebook, onChange, onRemove }: No
         </h3>
         <div className="flex items-center gap-3">
           <span className="text-xs text-white/30">Expira em {diasRestantes}d</span>
+          {onSave && (
+            <button
+              onClick={onSave}
+              aria-label="Salvar este notebook na biblioteca"
+              title="Salvar na biblioteca de etiquetas"
+              className={`rounded-lg p-1.5 transition-colors ${
+                justSaved ? 'text-primary' : 'text-white/30 hover:bg-white/5 hover:text-primary'
+              }`}
+            >
+              {justSaved ? <LucideBookmarkCheck size={16} /> : <LucideBookmarkPlus size={16} />}
+            </button>
+          )}
           {onRemove && (
             <button
               onClick={onRemove}
