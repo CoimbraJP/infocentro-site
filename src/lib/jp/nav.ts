@@ -5,6 +5,7 @@ import type { LucideIcon } from 'lucide-react';
 import {
   LucideLayoutDashboard,
   LucideTag,
+  LucideGamepad2,
   LucideMonitor,
   LucideSettings,
 } from 'lucide-react';
@@ -21,6 +22,7 @@ export interface JpNavItem {
 export const JP_NAV_ITEMS: JpNavItem[] = [
   { label: 'Dashboard', href: '/jp/dashboard', icon: LucideLayoutDashboard },
   { label: 'Etiquetas de Vitrine', href: '/jp/etiquetas', icon: LucideTag },
+  { label: 'Etiquetas PC Gamer', href: '/jp/pc-gamer', icon: LucideGamepad2 },
   { label: 'Abrir PDV', href: JP_PDV_URL, icon: LucideMonitor, external: true },
   { label: 'Configurações', href: '/jp/config', icon: LucideSettings },
 ];

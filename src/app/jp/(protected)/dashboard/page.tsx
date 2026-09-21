@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { LucideTag, LucideMonitor, LucideBoxes } from 'lucide-react';
+import { LucideTag, LucideGamepad2, LucideMonitor, LucideBoxes } from 'lucide-react';
 import ToolCard from '@/components/jp/ui/ToolCard';
 import Reveal from '@/components/ui/Reveal';
 import { JP_PDV_URL } from '@/lib/jp/config';
@@ -17,17 +17,17 @@ const TOOLS = [
     href: '/jp/etiquetas',
   },
   {
+    title: 'Etiquetas PC Gamer',
+    description: 'Criar etiquetas das máquinas gamer montadas.',
+    icon: LucideGamepad2,
+    href: '/jp/pc-gamer',
+  },
+  {
     title: 'Abrir PDV',
     description: 'Abrir o sistema principal da loja.',
     icon: LucideMonitor,
     href: JP_PDV_URL,
     external: true,
-  },
-  {
-    title: 'Em breve',
-    description: 'Novo módulo em desenvolvimento.',
-    icon: LucideBoxes,
-    disabled: true,
   },
   {
     title: 'Em breve',
